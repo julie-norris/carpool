@@ -53,7 +53,7 @@ class Driving_Route(db.Model):
                              db.ForeignKey('addresses.add_id'))
     end_add_id = db.Column(db.Integer, 
                            db.ForeignKey('addresses.add_id'))
-    arrival_time = db.Column(db.Integer, nullable=False)###Will be a pulldown menu with time increments"""
+    arrival_time = db.Column(db.Integer, nullable=False)###Store in UTC. Will be a pulldown menu with time increments"""
     driver_id = db.Column(db.Integer,
                           db.ForeignKey('people.user_id'))
     num_seats = db.Column(db.Integer, nullable=False)#### Limited range - 1-6###

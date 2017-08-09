@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form action="/rider" method="GET">
+    <div>
+      <label>
+        <h1>I am a Rider!</h1><br>        
+            <input type="submit" value="rider">
+      </label>
+    </div>
+</form>
+<br>
+<br>
+<br>
+<form action="/driver" method="GET">
+    <div>
+      <label>
+        <h1>I am a Driver!</h1><br>       
+            <input type="submit" value="driver">
+      </label>
+    </div>
+</form>
+
+{% endblock %}

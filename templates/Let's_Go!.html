@@ -1,57 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-  <head>
-    <meta charset="UTF-8">
-    <title>Route Map</title>
-    
-  </head>
-  <body>
-    <div id="map"></div>
-   
 
-    <a>Here is your route!</a>
-    
-  </body>
-  <script src="https://code.jquery.com/jquery.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&callback=initMap"
-        async defer></script>
-  <script>
-    x = navigator.geolocation
+Where are you going? 
+<!-- displays map and a box for driver to input destination -->
 
-    x.getCurrentPosition(success, failure);
+What time will you arrive?
+<!-- pull down menu with 15 minute time increments stored as datetime objects -->
 
-    function success(position) {
-        var mylat = position.coords.latitude;
-        var mylong = position..coords.longitude;
-       
-   
+How many seats do you have available for riders?
+<!-- displays icons for driver to select 1-6 -->
 
-    // Google-API-ready latitude and longitude string
+What is your starting address?
+<!-- driver inputs starting address which allows map to be generated -->
 
-    var coords = new google.maps.LatLng(mylat, mylong);
 
-    //Setting up Google Map
-        var mapOptions = {
-            zoom: 16,
-            center: coords,
-            mapTypeIs: google.maps.MapTypeId.ROADMAP
-        }
 
-        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-     }
-    
 
-    function failure() {
-        $('body').append("<p>Try again. It didn't work.</p>")
-    }
-  </script>
-  <style>
 
-    #map {
-        width: 400px;
-        height: 400px;
-    }
-    </style>
-  
 {% endblock %}

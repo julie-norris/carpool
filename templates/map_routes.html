@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+  <head>
+    <meta charset="UTF-8">
+    <title>Route Map</title>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+    <body>
+      <div id="map"></div>
+      <script>
+
+
+      function initMap() {
+        var myLatLong = {lat:37.765, lng:-122.241 };
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: myLatLong
+        });
+        var marker = new google.maps.Marker({
+          position: myLatLong,
+          map: map
+        });
+      }
+    </script>
+
+      <a>Here is your route!</a>
+      
+    </body>
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&callback=initMap"
+        async defer></script>
+  <script>
+    // x = navigator.geolocation
+
+    // x.getCurrentPosition(success, failure);
+
+    // function success(position) {
+    //     var mylat = position.coords.latitude;
+    //     var mylong = position..coords.longitude;
+           
+   
+
+    // Google-API-ready latitude and longitude string
+
+       // var coords = new google.maps.LatLng(mylat, mylong);
+
+    //Setting up Google Map
+    //     var mapOptions = {
+    //         zoom: 16,
+    //         center: coords,
+    //         mapTypeIs: google.maps.MapTypeId.ROADMAP
+    //     }
+
+    //     var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    //  }
+    
+
+    // function failure() {
+    //     $('body').append("<p>Try again. It didn't work.</p>")
+    // }
+  // <script>
+  
+  
+{% endblock %}

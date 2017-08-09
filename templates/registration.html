@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
-{% extends 'base.html' %}
 {% block content %}
 <h1>Please register to use CarPool!</h1>
 
-<form action="/new_account" method="POST">
+<form action="/register" method="POST">
 
     <div>
     
@@ -24,7 +23,7 @@
                 <input type="tel" name="phone_number" required>
             </label>
             <label>License Number (required):
-                <input type="text" name="license_number" pattern="[A-Za-z0-9]" required>
+                <input type="text" name="license_number" required>
             </label>
     </div>
 

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <title>CarPool</title>
+</head>
+<body>
+
+CarPool
+
+{% if "user_id" in session %}
+    <a href="/login"> Please login</a>
+{% else %}
+    <a href="/logout">Logout</a>
+{% endif %}
+
+<hr>
+
+{% for flash in get_flashed_messages() %}
+    {{ flash }}
+{% endfor %}
+
+{% block content%}
+    Put your body here.
+{% endblock %}
+
+
+</body>
+</html>

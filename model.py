@@ -1,6 +1,6 @@
 """Models and database functions for carpool."""
 
-from flask_sqlalchemy import flask_sqlalchemy
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
@@ -19,7 +19,7 @@ class People(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     license_number = db.Column(db.String(20), nullable=False)
 
-    #### Define Relationships ###
+    
 
 
 
@@ -60,8 +60,8 @@ class Driving_Route(db.Model):
 
     
     ####define relationships###
-    starting_address = db.relationship('Address', backref='driving_routes')
-    end_address = db.relationship('Address', backref='driving_routes')
+    # starting_address = db.relationship('Address', backref='driving_routes')
+    # end_address = db.relationship('Address', backref='driving_routes')
     driver = db.relationship('People', backref='driving_routes')
 
 
@@ -92,18 +92,17 @@ class Ride(db.Model):
 
     __tablename__ = "rides"
 
-
     rider_id = db.Column(db.Integer,
                         autoincrement=True,
                         primary_key=True)
     route_id = db.Column(db.Integer,
                          db.ForeignKey('driving_routes.route_id'))
-    rider_id = db.Column(db.Integer,
+    rider = db.Column(db.Integer,
                          db.ForeignKey('people.user_id'))
 
     ####define relationships####
-    routeId = db.relationship('Route', backref='rides')
-    riderId = db.relationship('People', backref='rides')
+    route = db.relationship('Driving_Route', backref='rides')
+    person_riding = db.relationship('People', backref='rides')
 
 
 class Ride_Need(db.Model):
@@ -115,54 +114,60 @@ class Ride_Need(db.Model):
                          autoincrement=True,
                          primary_key=True)
     start_address_id = db.Column(db.Integer,
-                           dbForeignKey('addresses.add_id'))
+                           db.ForeignKey('addresses.add_id'))
     end_address_id = db.Column(db.Integer,
-                           dbForeignKey('addresses.add_id'))
+                           db.ForeignKey('addresses.add_id'))
     arrival_time = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer,
                         db.ForeignKey('people.user_id'))
     seats_needed = db.Column(db.Integer, 
-                             ForeignKey('driving_routes.num_seats'))
+                             nullable=False)
 
 
     ###Define Relationships####
     user = db.relationship("People", backref='ride_needs')
-    adress = db.relationship('Address', backref='ride_needs')
-    seats = db.relationship('Driving_Route', backref='ride_needs')
-    start = db.relationship('Address', backref='ride_needs')
-    end = db.relationship('Address', backref='ride_needs')
-
-
-# class Event_Routes(db.Model):
-#     """Middle Table for Events and Routes"""
-
-#     __tablename__ = "Event-Routes"
-
-#     _id = db.Column(db.Integer,
-#                    autoincrement=True,
-#                    primary_key=True)
-#     event_id = db.Column(db.ForeignKey('ride-needed.event_id'))
-#     route_id = db.Column(db.ForeignKey('driving-routes.route_id'))
-
-    #####define relationships####
-    # eventId = db.relationship('Event', backref='event-routes')
-    # routeId = db.relationship('Routes', backref='event-routes')
+    # start = db.relationship('Address', backref='ride_needs')
+    # end = db.relationship('Address', backref='ride_needs')
 
 
 
     ##########################################################################
     #Helper Functions
+def example_data():
+    """Sample Data to Test Database"""
 
-    def connect_to_db(app):
+    usr1 = People(email='happy@gmail.com', password='onefineday', fname='Smiley', lname='Dwarf',
+                    phone='425-222-2222', license_number='Null')
+    usr2 = People(email='grumpy@gmail.com', password='onceuponatime', fname='Grump', lname='Dwarf',
+                    phone='425-222-2223', license_number='Null')
+    usr3 = People(email='sneezey@gmail.com', password='tissueplease', fname='Snee', lname='Zeee',
+                    phone='425-222-2224', license_number='Null')
 
-        app.config['SQLALCHEMY_DATABASE_URI'] ### WHAT GOES HERE?###
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        db.app = app
-        db.init_app(app)
+    Address1 = Address(street_address='321 Main Street', city='Alameda', state='CA', zip_code='94501',
+                    latitude = 'Null', longitude='Null', name_of_place='Alameda Point Gym')
+    Address2 = Address(street_address='425 Webster', city='Alameda', state='CA', zip_code='94501',
+                    latitude ='Null', longitude='Null', name_of_place='Alameda Karate')
+    Address3 = Address(street_address='2 Hornet Drive', city='Alameda', state='CA', zip_code='94501',
+                    latitude='Null', longitude='Null', name_of_place='Hornet Field')
+    Address4 = Address(street_address='1 Boulder Canyon Road', city='Boulder', state='CO', zip_code='80303',
+                    latitude='Null', longitude='Null', name_of_place='CU Boulder')
 
-    if __name__ == "__main__":
+    db.session.add_all([usr1,usr2,usr3,Address1,Address2,Address3,Address4])
+    db.session.commit()
 
-        from server import app
-        connect_to_db(app)
+def connect_to_db(app, database_uri='postgresql:///carpool'):
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.app = app
+    db.init_app(app)
+
+if __name__ == "__main__":
+
+    from server import app
+    connect_to_db(app)
+
+    db.create_all()
+
 
 

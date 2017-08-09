@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% extends 'base.html' %}
+{% block content %}
+<h1>Please register to use CarPool!</h1>
+
+<form action="/new_account" method="POST">
+
+    <div>
+    
+        <h3> New users: </h3>
+            <label>Email:
+                <input type="email" name="email" required>
+            </label>
+            <label>Password:
+                <input type="password" name="password" required>
+            </label>
+            <label>First Name:
+                <input type="text" name="fname" required>
+            </label>
+            <label>Last Name:
+                <input type="text" name="lname" required>
+            </label>
+            <label>Phone Number:
+                <input type="tel" name="phone_number" required>
+            </label>
+            <label>License Number (required):
+                <input type="text" name="license_number" pattern="[A-Za-z0-9]" required>
+            </label>
+    </div>
+
+    <div>
+        <input type="submit" value="Registration">
+    </div>
+
+</body>
+</html>
+{% endblock %}

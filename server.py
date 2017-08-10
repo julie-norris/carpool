@@ -26,9 +26,9 @@ def registration():
 
     return render_template("registration.html")
 
-@app.route('/register', methods=['POST'])
-def add_new_user():
-    """Creates a new user in the database."""
+# @app.route('/register', methods=['POST'])
+# def add_new_user():
+#     """Creates a new user in the database."""
 
 #     email = request.form["email"]
 #     password = request.form["password"]
@@ -44,7 +44,7 @@ def add_new_user():
 #         return redirect("/login")
 
 #     else:    
-#     user = People(email=email, password=password, fname=fname, lname=lname,
+#         user = People(email=email, password=password, fname=fname, lname=lname,
 #                   phone=phone_number, license_number=license_number)
 
 #     db.session.add(user)
@@ -55,7 +55,7 @@ def add_new_user():
     
 #     flash("Thank you for registering for CarPool! You have been logged in!")
     
-    return redirect("/driver_or_rider")
+#     return redirect("/driver_or_rider")
 
 @app.route('/login', methods=['GET'])
 def show_login_form():
@@ -63,36 +63,57 @@ def show_login_form():
     return render_template("login.html")
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login_process', methods=['POST'])
 def login_process():
 
+    # email = request.form["email"]
+    # password = request.form["password"]
+
+    # user = People.query.filter_by(email=email).first
+
+    # if not user:
+    #     flash("Log-in failed. Have you registered?")
+    #     return redirect("/register")
+    # if user.password != password:
+    #     flas("Incorrect password")
+    #     return redirect("/login")
+
+    # session["user_id"] = people.user_id
+
+    # flash("Logged in")
     return redirect("/driver_or_rider")
 
-
 @app.route('/driver_or_rider', methods=['GET'])
-def isuser_driver_or_rider():
+def is_user_driver_or_rider():
 
     return render_template("driving_or_riding.html")
 
 
 @app.route('/driver', methods=['GET'])
 def driver_directedto_letsgo():
+    
+    return render_template("Let's_go!.html")
 
-    return redirect("/lets_go") 
+@app.route('/map', methods=['POST'])
+def driving_map():
+    end_address=request.form.get("destination")
+    start_address=request.form.get("start_address")
+    return redirect('/rider')
+    
 
 @app.route('/rider', methods=['GET'])
 def rider_directedto_mapwithroutes():
 
     return render_template("map_routes.html")
 
-@app.route('/lets_go')
-def create_profile():
-    """Create a Route for a user."""
+# @app.route('/lets_go')
+# def create_profile():
+#     """Create a Route for a user."""
 
-    return render_template("Let's_Go!.html")
+#     return render_template("Let's_Go!.html")
 
-@app.route('/map_route') ## Need to pass in the variables from the Let's Go form)
-def showmap_and_availablerides():
+# @app.route('/map_route') ## Need to pass in the variables from the Let's Go form)
+# def showmap_and_availablerides():
 
 ###DISPLAY MAP WITH ALL THE POSSIBLE ROUTES SHOWN###
 

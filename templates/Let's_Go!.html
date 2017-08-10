@@ -1,16 +1,121 @@
 {% extends 'base.html' %}
+{% block title %}Let's Go!{% endblock %}
 {% block content %}
+<head>
+  <meta content="initial-scale=1.0, user-scalable=no">
+<style>
+#map {
+  height: 400px;
+}
 
-Where are you going? 
+#pac-origin-input,
+#pac-destination-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12 px;
+  padding: 0 11px 0 13px;
+  width: 200px;
+}
+
+</style>
+<body>
+<form action="/map", methods='POST'>
+  <input id="pac-input" class="controls" type="text"
+    placeholder="Start typing here">      
+  <!-- <div id="destination"> 
+    <h1>Where are you going?</h1> 
+    <input id="pac-destination-input" type="text" placeholder="Destination?">
+  </div>
+  <br>
+  <div id="start-address">
+    <h1>What is your starting address?</h1> 
+    <input id="pac-origin-input" class="controls" type="text" placeholder="Where are you starting from?">
+  </div> -->
+
+  <div id="map"></div>
+  
+
+  <script>
+
+      function initMap() {
+        var myLatLong = {lat:37.765, lng:-122.241 };
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: myLatLong
+        });
+        var marker = new google.maps.Marker({
+          position: myLatLong,
+          map: map
+        });
+
+       var contentString = "What goes here???"
+       var infowindow = new google.maps.InfoWindow ( {
+        content: contentString
+        });
+
+       var marker = new google.maps.Marker({
+        position: myLatLong,
+        map: map, 
+        title: 'Name of this Place'
+        });
+        marker.addListener('click', function() {
+         infowindow.open(map, marker);
+        });
+      
+       var defaultBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(32.166, -117.246),
+        new google.maps.LatLng(44.269, -67.678));
+
+       var options = {
+        bounds: defaultBounds
+       };
+// Get the HTML input element for the autocomplte search box.
+       var input = document.getElementById('pac-input');
+      
+       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+// Create the autocomplete object.
+       var autocomplete = new google.maps.places.Autocomplete(input, options) 
+
+     }  
+
+    </script>
+      
+    
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&libraries=places&callback=initMap"
+        async defer></script>
+    <br>
+    <br>
+  <script src="https://code.jquery.com/jquery.js"></script>  
+  <div id="timeSelect">
+    <h1>What time will you arrive?</h1>
+    <input type="time" name="arrivaltime">      
+  </div>
+  <!-- // THERE WERE SOME NOTES ABOUT USING TIMEPICKER IN BOOTSTRAP ??   -->
+    <br>
+    <br>
+    
+  <div id="num_seats">
+    <h1>How many seats do you have available? (1-6)</h1>
+    <input type="number" name="seats">
+  </div>
+    <br>
+    <br>
+      <input type="submit">
+</form>
+</body>
+
+
+
+
 <!-- displays map and a box for driver to input destination -->
 
-What time will you arrive?
 <!-- pull down menu with 15 minute time increments stored as datetime objects -->
 
-How many seats do you have available for riders?
 <!-- displays icons for driver to select 1-6 -->
 
-What is your starting address?
 <!-- driver inputs starting address which allows map to be generated -->
 
 

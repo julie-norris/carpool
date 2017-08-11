@@ -22,17 +22,17 @@
 </style>
 <body>
 <form action="/map", methods='POST'>
-  <input id="pac-input" class="controls" type="text"
-    placeholder="Start typing here">      
-  <!-- <div id="destination"> 
-    <h1>Where are you going?</h1> 
-    <input id="pac-destination-input" type="text" placeholder="Destination?">
-  </div>
+  <!-- <input id="pac-input" class="controls" type="text"
+    placeholder="Start typing here">  -->     
+  <span id="destination"> 
+    <h1>Where are you going?</h1>
+    <input  id="pac-destination-input" class="controls" type="text" placeholder="Destination?">
+  </span>
   <br>
   <div id="start-address">
     <h1>What is your starting address?</h1> 
     <input id="pac-origin-input" class="controls" type="text" placeholder="Where are you starting from?">
-  </div> -->
+  </div>
 
   <div id="map"></div>
   
@@ -72,11 +72,13 @@
         bounds: defaultBounds
        };
 // Get the HTML input element for the autocomplte search box.
-       var input = document.getElementById('pac-input');
-      
+       var input = document.getElementById('pac-destination-input');
+       var second_input = document.getElementById('pac-origin-input');
        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+       map.controls[google.maps.ControlPosition.TOP_CENTER].push(second_input);
 // Create the autocomplete object.
-       var autocomplete = new google.maps.places.Autocomplete(input, options) 
+       var autocomplete = new google.maps.places.Autocomplete(input,options);
+       var autocomplete_2 = new google.maps.places.Autocomplete(second_input, options) 
 
      }  
 

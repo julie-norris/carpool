@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class People(db.Model):
+class Person(db.Model):
     """Creates Users and stores pertinent information."""
 
     __tablename__ = "people"
@@ -62,7 +62,7 @@ class Driving_Route(db.Model):
     ####define relationships###
     # starting_address = db.relationship('Address', backref='driving_routes')
     # end_address = db.relationship('Address', backref='driving_routes')
-    driver = db.relationship('People', backref='driving_routes')
+    driver = db.relationship('Person', backref='driving_routes')
 
 
 
@@ -83,7 +83,7 @@ class User_Address(db.Model):
 
     ###define relationships###
     addressId = db.relationship('Address', backref='user-addresses')
-    userId = db.relationship('People', backref='user-addresses')
+    userId = db.relationship('Person', backref='user-addresses')
 
 
 
@@ -102,7 +102,7 @@ class Ride(db.Model):
 
     ####define relationships####
     route = db.relationship('Driving_Route', backref='rides')
-    person_riding = db.relationship('People', backref='rides')
+    person_riding = db.relationship('Person', backref='rides')
 
 
 class Ride_Need(db.Model):
@@ -125,7 +125,7 @@ class Ride_Need(db.Model):
 
 
     ###Define Relationships####
-    user = db.relationship("People", backref='ride_needs')
+    user = db.relationship("Person", backref='ride_needs')
     # start = db.relationship('Address', backref='ride_needs')
     # end = db.relationship('Address', backref='ride_needs')
 
@@ -136,11 +136,11 @@ class Ride_Need(db.Model):
 def example_data():
     """Sample Data to Test Database"""
 
-    usr1 = People(email='happy@gmail.com', password='onefineday', fname='Smiley', lname='Dwarf',
+    usr1 = Person(email='happy@gmail.com', password='onefineday', fname='Smiley', lname='Dwarf',
                     phone='425-222-2222', license_number='Null')
-    usr2 = People(email='grumpy@gmail.com', password='onceuponatime', fname='Grump', lname='Dwarf',
+    usr2 = Person(email='grumpy@gmail.com', password='onceuponatime', fname='Grump', lname='Dwarf',
                     phone='425-222-2223', license_number='Null')
-    usr3 = People(email='sneezey@gmail.com', password='tissueplease', fname='Snee', lname='Zeee',
+    usr3 = Person(email='sneezey@gmail.com', password='tissueplease', fname='Snee', lname='Zeee',
                     phone='425-222-2224', license_number='Null')
 
     Address1 = Address(street_address='321 Main Street', city='Alameda', state='CA', zip_code='94501',
@@ -158,7 +158,7 @@ def example_data():
 def connect_to_db(app, database_uri='postgresql:///carpool'):
 
     app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
 

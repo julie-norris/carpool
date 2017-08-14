@@ -19,94 +19,139 @@
   width: 200px;
 }
 
+#pac-origin-input: focus,
+#pac-destination-input: focus, {
+  border-color: #4d90fe;
+}
+
 </style>
 <script>
      var directionsDisplay;
-     var directionsService;
+     var directionsService = new google.maps.DirectionsService();
      var map;
      
      // var start = new google.maps.LatLng(startLatLng);
      // var end = new google.maps.LatLng(endLatLng);
 
       function initMap() {
-        directionsService = new google.maps.DirectionsService();
         directionsDisplay = new google.maps.DirectionsRenderer();
         var myLatLong = {lat:37.765, lng:-122.241 };
         var mapOptions = {
           zoom: 15,
-          mapTypeId: google.maps.MapTypeID.ROADMAP,
+          mapTypeId: 'ROADMAP',
           center: myLatLong
         };
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        map.directionsDisplay.setMap(map);
         var marker = new google.maps.Marker({
           position: myLatLong, 
-        });
-
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
-        directionsDisplay.setMap(map);
-        new AutocompleteDirectionsHandler(map);
-      }
-
-      function calcRoute() {
-        var start = document.getElementById('start').value;
-        var end = document.getElementById('end').value;
-        var request = {
-          origin: start,
-          destination: end,
-          travelMOde: 'DRIVING'
-        };
-        directionsService.route(request, function(result, status) {
-          if (status == 'OK') {
-            directionsDisplay.setDirections(result);
-          }
-        });
-      }
-       var contentString = "What goes here???"
-       var infowindow = new google.maps.InfoWindow ( {
-        content: contentString
-        });
-
-       var marker = new google.maps.Marker({
-        position: myLatLong,
-        map: map, 
-        title: 'Name of this Place'
-        });
-        marker.addListener('click', function() {
-         infowindow.open(map, marker);
+          map: map
         });
       
-       var defaultBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(32.166, -117.246),
-        new google.maps.LatLng(44.269, -67.678));
-
-       var options = {
-        bounds: defaultBounds
-       };
-// Get the HTML input element for the autocomplte search box.
-       var input = document.getElementById('pac-destination-input');
-       var second_input = document.getElementById('pac-origin-input');
-       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-       map.controls[google.maps.ControlPosition.TOP_CENTER].push(second_input);
-// Create the autocomplete object.
-       var autocomplete = new google.maps.places.Autocomplete(input,options);
-       var autocomplete_2 = new google.maps.places.Autocomplete(second_input, options); 
-
-     
-    function AutocompleteDirectionsHandler(map) {
-      this.map = map;
-      this.originPlaceID = null;
-      this.destinationPlaceID = null;
-      this.travelMode = 'DRIVING';
-      var originInput = document.getElementById('pac-origin-input');
-      var destinationInput = document.getElementById('destination-input');
-      this.directionsSErvice = new google.maps.DirectionsService;
-      this.directionsDIsplay = new google.maps.DirectionsRenderer;
-      this.directionsDisplay.setMap(map);
+      new AutocompleteDirectionsHandler(map);
+      }
 
 
-      var originAutocomplete = new google.maps.places.Autocomplete(originInput, {placeIdOnly: true});
-      var destinationAutocomplete = new google.maps.places. Autocomplete( destinationInput, {placeIdOnly: true});
-    }
+    //   function AutocompleteDirectionsHandler(map) {
+    //     this.map = map;
+    //     this.originPlaceID = null;
+    //     this.destinationPlaceID = null;
+    //     this.travelMode = 'DRIVING';
+    //     var originInput = document.getElementById('pac-origin-input');
+    //     var destinationInput = document.getElementById('destination-input');
+    //     this.directionsService = new google.maps.DirectionsService;
+    //     this.directionsDisplay = new google.maps.DirectionsRenderer;
+    //     // this.directionsDisplay.setMap(map);
+
+
+    //     var originAutocomplete = new google.maps.places.Autocomplete(originInput, {placeIdOnly: true});
+    //     var destinationAutocomplete = new google.maps.places. Autocomplete( destinationInput, {placeIdOnly: true});
+
+    //     this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+    //     this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+    //     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(OriginInput);
+    //     this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(destinationInput);
+    //   }
  
+    //  // var infowindow;
+
+    //   function calcRoute() {
+    //     var start = document.getElementById('start').value;
+    //     var end = document.getElementById('end').value;
+    //     directionsService = new google.maps.DirectionsService();
+    //     directionsDisplay = new google.maps.DirectionsRenderer();
+    //     var request = {
+    //       origin: start,
+    //       destination: end,
+    //       travelMode: 'DRIVING'
+    //     };
+    //     directionsService.route(request, function(result, status) {
+    //       if (status == 'OK') {
+    //         directionsDisplay.setDirections(result);
+    //       }
+    //     });
+    //   }
+
+    //   // Lines below have to do with the infowindow. Not an essential element of the app
+
+    //    // var contentString = "What goes here???"
+    //    // infowindow = new google.maps.InfoWindow ( {
+    //    //  content: contentString
+    //    //  });
+
+    //    // var marker = new google.maps.Marker({
+    //    //  position: myLatLong,
+    //    //  map: map, 
+    //    //  title: 'Name of this Place'
+    //    //  });
+    //    //  marker.addListener('click', function() {
+    //    //   infowindow.open(map, marker);
+    //    //  });
+      
+    //    var defaultBounds = new google.maps.LatLngBounds(
+    //     new google.maps.LatLng(32.166, -117.246),
+    //     new google.maps.LatLng(44.269, -67.678));
+
+    //    var options = {
+    //     bounds: defaultBounds
+    //    };
+
+    // AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(autocomplete, mode) {
+    //   var me = this;
+    //   autocomplete.bindTo('bounds', this.map);
+    //   autocomplete.addListener('place_changed', function() {
+    //     var place = autocopmlete.getPlace();
+    //     if (mode === 'ORIG') {
+    //       me.originPlaceId = place.place_id;
+    //     } else {
+    //       me.destinationPlaceId = place.place_id;
+    //     }
+    //     me.route()
+    //     });
+    // };
+
+    // AutocompleteDirectionsHandler.prototype.route = function() {
+    //   if(!this.originPlaceId || !this.destinationPlaceId) {
+    //       return;
+
+    //   }
+    //   var me = this;
+
+    //   this.directionsService.route({
+    //     origin: {'placeId': this.originPlaceId},
+    //     destination: {'placeId': this.destinationPlaceId},
+    //   }, function(response, status) {
+    //     if(status === 'OK') {
+    //       me.directionsDisplay.setDirections(response);
+
+    //     } else {
+    //       window.alert('Directions failed due to' + status);
+    //     }
+    //   });
+    // };
+     
+    
 </script>
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&libraries=places&callback=initMap"
@@ -114,7 +159,7 @@
 <script src="https://code.jquery.com/jquery.js"></script> 
 </head>
 <body>
-<form action="/map", method='POST'>
+<form action="/map", method='GET'>
   <!-- <input id="pac-input" class="controls" type="text"
     placeholder="Start typing here">  -->     
   <span id="destination"> 

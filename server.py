@@ -90,19 +90,23 @@ def is_user_driver_or_rider():
 
 
 @app.route('/driver', methods=['GET'])
-def driver_directedto_letsgo():
+def driver_letsgo():
     
     return render_template("Let's_go!.html")
 
 @app.route('/map', methods=['POST'])
 def driving_map():
+
     end_address=request.form.get("destination")
     start_address=request.form.get("start_address")
+    
+
+
     return redirect('/rider')
     
 
 @app.route('/rider', methods=['GET'])
-def rider_directedto_mapwithroutes():
+def rider_mapwithroutes():
 
     return render_template("map_routes.html")
 

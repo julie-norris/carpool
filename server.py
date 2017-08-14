@@ -89,7 +89,7 @@ def is_user_driver_or_rider():
     return render_template("driving_or_riding.html")
 
 
-@app.route('/driver', methods=['GET'])
+@app.route('/driver', methods=['POST'])
 def driver_letsgo():
     
     return render_template("Let's_go!.html")

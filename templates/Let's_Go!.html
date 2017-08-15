@@ -85,13 +85,13 @@
           }
          });
       }
-
-   
+  
 </script>
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&libraries=places&callback=initMap"
         async defer></script>
 <script src="https://code.jquery.com/jquery.js"></script> 
+<script> $('#getroute').on('click', calcRoute)</script>
 
 <script> $('#form').on('submit', function (evt) {
       evt.preventDefault();
@@ -125,7 +125,7 @@
   
   <div id="timeSelect">
     <h1>What time will you arrive?</h1>
-    <input type="time" name="arrivaltime">      
+    <input type="time" name="arrival_time">      
   </div>
   <!-- // THERE WERE SOME NOTES ABOUT USING TIMEPICKER IN BOOTSTRAP ??   -->
     <br>
@@ -133,7 +133,7 @@
     
   <div id="num_seats">
     <h1>How many seats do you have available? (1-6)</h1>
-    <input type="number" name="seats">
+    <input type="number" name="num_seats">
   </div>
     <br>
     <br>

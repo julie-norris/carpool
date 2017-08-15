@@ -97,7 +97,7 @@ def driver_letsgo():
 def driving_map():
     
     start_address=request.form.get("originInput")
-
+### HOW DO I ADD BOTH SETS OF INFO - start_addresses and end_addresses ###
     payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': start_address}
     info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
     
@@ -108,8 +108,6 @@ def driving_map():
     binary = info_2.content
     output = json.loads(binary)
 
-    print output['status']
-    pprint.pprint(output)
 
     results = output['results'][0]
     latitude = results['geometry']['location']['lat']
@@ -120,15 +118,35 @@ def driving_map():
     city = results['address_components'][3]['short_name']
     state = results['address_components'][5]['short_name']
     zip_code = results['address_components'][7]['short_name']
-    
-    # get destinationInput & get originInput and split them into fields
-    #then save them into the addresses table. 
+    street_address = (street_number + ' ' + street_name)
+    arrival_time=request.form['arrival_time']
+    num_seats=request.form['num_seats']
+    name_of_place = None
 
+
+    address = Address.query.filter_by(street_address=street_address).first()
+
+    if not address:
+        address = Address(street_address=street_address, 
+                          city=city,
+                          state=state,
+                          zip_code=zip_code,
+                          latitude=latitude,
+                          longitude=longitude,
+                          name_of_place=None)
+
+    db.session.add(address)
+    db.session.commit()
+
+    # driving_route = Driving_Route(arrival_time=arrival_time, num_seats=num_seats,
+                                # driver_id=user_id)
     # after get addresses, create a row in the driver table and with the driver ID from the session
     # will have the arrival time and number of seats. 
+    
+    # db.session.add(driving_route)
+    
 
-
-    return redirect('/thank_you')
+    return redirect("/thank_you")
     
 
 @app.route('/rider', methods=['GET'])
@@ -152,11 +170,8 @@ def rider_mapwithroutes():
 
 @app.route('/thank_you')
 def thanks():
-    pass
-    # print """Thank you for sharing your ride! You will receive an alert when a rider has"""
-    # """requested a seat in your car!"""
-
-    # redirect('/logout')
+   
+   return render_template('thank_you.html')
 
 @app.route('/confirmation')
 def confirmsdriver_and_rider():

@@ -91,7 +91,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&libraries=places&callback=initMap"
         async defer></script>
 <script src="https://code.jquery.com/jquery.js"></script> 
-<script> $('#getroute').on('click', calcRoute)</script>
+<script> $('#getroute').on('button', calcRoute);</script>
 
 <script> $('#form').on('submit', function (evt) {
       evt.preventDefault();
@@ -112,20 +112,20 @@
   <input id="end" name="end" type='hidden'>
   <span id="destination"> 
     <h1>Where are you going?</h1>
-    <input  id="pac-destination-input" name="destinationInput" class="controls" type="text" placeholder="Destination?">
+    <input  id="pac-destination-input" name="destinationInput" class="controls" type="text" placeholder="Destination?" value="AT&T Park, Willie Mays Plaza, San Francisco, CA, United States">
   </span>
   <br>
   <input id="start" name="start" type='hidden'>
   <div id="start-address">
     <h1>What is your starting address?</h1> 
-    <input id="pac-origin-input" name="originInput" class="controls" type="text" placeholder="Where are you starting from?">
+    <input id="pac-origin-input" name="originInput" class="controls" type="text" placeholder="Where are you starting from?" value="Disneyland Park, Disneyland Drive, Anaheim, CA, United States">
   </div>
   <button id="getroute" type="button"> Get Directions</button>
   <div id="map"></div>
   
   <div id="timeSelect">
     <h1>What time will you arrive?</h1>
-    <input type="time" name="arrival_time">      
+    <input type="time" name="arrival_time" value="08:00:00.00">      
   </div>
   <!-- // THERE WERE SOME NOTES ABOUT USING TIMEPICKER IN BOOTSTRAP ??   -->
     <br>
@@ -133,7 +133,7 @@
     
   <div id="num_seats">
     <h1>How many seats do you have available? (1-6)</h1>
-    <input type="number" name="num_seats">
+    <input type="number" name="num_seats" value="1" min="1" max="6" step="1">
   </div>
     <br>
     <br>

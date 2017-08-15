@@ -86,6 +86,7 @@ def login_process():
 
     email = request.form["email"]
     password = request.form["password"]
+    driver_or_rider = request.form["typeofuser"]
 
     user = Person.query.filter_by(email=email).first()
 
@@ -99,7 +100,11 @@ def login_process():
     session["user_id"] = user.user_id
 
     flash("Logged in")
-    return redirect("/driver_or_rider")
+
+    if driver_or_rider == 'driver':
+        return redirect("/driver")
+    else:
+        return redirect("/rider")
 
 @app.route('/driver_or_rider', methods=['POST'])
 def is_user_driver_or_rider():
@@ -126,6 +131,7 @@ def driving_map():
 
     extract_data_fordb(info)
     extract_data_fordb(info_2)
+    create_drivingroute()
 
     return redirect("/thank_you")
 
@@ -139,18 +145,31 @@ def extract_data_fordb(data):
     results = output['results'][0]
     latitude = results['geometry']['location']['lat']
     longitude = results['geometry']['location']['lng']
+    street_number = None
+    street_name = None
+    city = None
+    state = None
+    zip_code = None
 
-    street_number = results['address_components'][0]['short_name']
-    street_name = results['address_components'][1]['short_name']
-    city = results['address_components'][3]['short_name']
-    state = results['address_components'][5]['short_name']
-    zip_code = results['address_components'][7]['short_name']
-    street_address = (street_number + ' ' + street_name)
-    
-    name_of_place = None
+    for address_components in results['address_components']:
+        
+        if address_components['types'][0]=='street_number':
+            street_number=address_components['short_name']
+        if address_components['types'][0]=='route':
+            street_name=address_components['short_name']
+        if address_components['types'][0]=='locality':
+            city=address_components['short_name']
+        if address_components['types'][0]=="administrative_area_level_1":
+            state=address_components['short_name']
+        if address_components['types'][0]=="postal_code":
+            zip_code=address_components['short_name']
 
+    street_address = "{num} {name}".format(num=street_number, name=street_name)
 
-    address = Address.query.filter_by(street_address=street_address).first()
+    address = Address.query.filter_by(street_address=street_address, 
+                                      city=city, 
+                                      state=state, 
+                                      zip_code=zip_code).first()
 
     if not address:
         address = Address(street_address=street_address, 
@@ -160,8 +179,23 @@ def extract_data_fordb(data):
                           latitude=latitude,
                           longitude=longitude,
                           name_of_place=None)
+    
+    
+        db.session.add(address)
+        db.session.commit()
 
-    db.session.add(address)
+
+
+def create_drivingroute():
+
+    arrival_time=request.form['arrival_time']
+    num_seats=request.form['num_seats']
+    driving_route = Driving_Route(
+        driver_id=people.user_id,
+        arrival_time=arrival_time,
+        num_seats=num_seats)
+
+    db.session.add(driving_route)
     db.session.commit()
 
     # driving_route = Driving_Route(arrival_time=arrival_time, num_seats=num_seats,
@@ -171,11 +205,11 @@ def extract_data_fordb(data):
     
     # db.session.add(driving_route)
     
+    
 
     
-    
-    # arrival_time=request.form['arrival_time']
-    # num_seats=request.form['num_seats']
+
+
 
 @app.route('/rider', methods=['GET'])
 def rider_mapwithroutes():

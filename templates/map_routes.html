@@ -23,11 +23,7 @@
         });
         infoWindow = new google.maps.InfoWindow;
 
-        var marker = new google.maps.Marker({
-          position: myLatLong,
-          map: map
-        });
-      }
+    }
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -46,6 +42,17 @@
       } else {
         handleLocationError(false, infoWindow, map.getCenter());
       }
+        // marker.setPlace({
+        //       placeId: place.place_id,
+        //       location: place.geometry.location
+        //     });
+        //     marker.setVisible(true);
+        //     infowindowContent.children['place-name'].textContent = place.name;
+        //     infowindowContent.children['place-id'].textContent = place.place_id;
+        //     infowindowContent.children['place-address'].textContent =
+        //         place.formatted_address;
+        //     infowindow.open(map, marker);
+         
 
       function handleLocationError(browserHasGeolocation,  infoWindow, pos) {
         infoWindow.setPosition(pos);

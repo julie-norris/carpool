@@ -1,10 +1,9 @@
 """ CarPool"""
 
 from jinja2 import StrictUndefined
-
+import requests, pprint, json
 from flask import Flask, request, jsonify, render_template, flash, session, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-
 from model import db, connect_to_db, Person, Address, Driving_Route, User_Address, Ride, Ride_Need
 app = Flask(__name__)
 
@@ -96,13 +95,40 @@ def driver_letsgo():
 
 @app.route('/map', methods=['POST'])
 def driving_map():
-
-    end_address=request.form.get("destination")
-    start_address=request.form.get("start_address")
     
+    start_address=request.form.get("originInput")
+
+    payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': start_address}
+    info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
+    
+    end_address=request.form.get("destinationInput")
+    payload_2 = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': end_address}
+    info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2)
+
+    binary = info_2.content
+    output = json.loads(binary)
+
+    print output['status']
+    pprint.pprint(output)
+
+    results = output['results'][0]
+    latitude = results['geometry']['location']['lat']
+    longitude = results['geometry']['location']['lng']
+
+    street_number = results['address_components'][0]['short_name']
+    street_name = results['address_components'][1]['short_name']
+    city = results['address_components'][3]['short_name']
+    state = results['address_components'][5]['short_name']
+    zip_code = results['address_components'][7]['short_name']
+    
+    # get destinationInput & get originInput and split them into fields
+    #then save them into the addresses table. 
+
+    # after get addresses, create a row in the driver table and with the driver ID from the session
+    # will have the arrival time and number of seats. 
 
 
-    return redirect('/rider')
+    return redirect('/thank_you')
     
 
 @app.route('/rider', methods=['GET'])
@@ -122,6 +148,15 @@ def rider_mapwithroutes():
 ###DISPLAY MAP WITH ALL THE POSSIBLE ROUTES SHOWN###
 
     return redirect('/confirmation')
+
+
+@app.route('/thank_you')
+def thanks():
+    pass
+    # print """Thank you for sharing your ride! You will receive an alert when a rider has"""
+    # """requested a seat in your car!"""
+
+    # redirect('/logout')
 
 @app.route('/confirmation')
 def confirmsdriver_and_rider():

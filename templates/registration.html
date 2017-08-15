@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Please register to use CarPool!</h1>
 
-<form action="/driver_or_rider" method="POST">
+<form action="/register_newperson" method="POST">
 
     <div>
     
@@ -25,6 +25,14 @@
             <label>License Number (required):
                 <input type="text" name="license_number" required>
             </label>
+            <br>
+            <br>
+            <label> Driver or Rider:<br>
+                <input type='radio' name="typeofuser" value="rider">Rider<br>
+                <input type='radio' name="typeofuser" value="driver">Driver<br>
+            </label>
+
+
     </div>
 
     <div>

@@ -5,11 +5,14 @@ import requests, pprint, json
 from flask import Flask, request, jsonify, render_template, flash, session, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from model import db, connect_to_db, Person, Address, Driving_Route, User_Address, Ride, Ride_Need
+import re
+
 app = Flask(__name__)
 
 app.secret_key = "SOMETHINGDIFFERENT"
 
 app.jinja_env.undefined = StrictUndefined
+
 
 
 @app.route('/')
@@ -25,16 +28,22 @@ def registration():
 
     return render_template("registration.html")
 
-@app.route('/register_newperson', methods=['POST'])
+@app.route('/register_newperson', methods=['POST', 'GET'])
 def add_new_user():
     """Creates a new user in the database."""
-
+    driver_or_rider = request.form["typeofuser"]
     email = request.form["email"]
     password = request.form["password"]
     fname = request.form["first_name"]
     lname = request.form["last_name"]
     phone = request.form["phone_number"]
     license_number = request.form["license_number"]
+
+    match = re.match(r'^[a-zA-Z0-9 -]{5,9}$', license_number)
+
+    if not match:
+        flash("Invalid license_number. Try again.")
+        return redirect("/register")
 
     user = Person.query.filter_by(email=email).first()
 
@@ -43,8 +52,14 @@ def add_new_user():
         return redirect("/login")
 
     else:    
-        user = Person(email=email, password=password, fname=fname, lname=lname,
-                  phone=phone_number, license_number=license_number)
+        user = Person(
+            email=email,
+            password=password,
+            fname=fname,
+            lname=lname,
+            phone=phone_number, 
+            license_number=license_number
+            )
 
     db.session.add(user)
     db.session.commit()
@@ -54,7 +69,11 @@ def add_new_user():
     
     flash("Thank you for registering for CarPool! You have been logged in!")
     
-    return redirect("/driver_or_rider")
+    if driver_or_rider == 'driver':
+
+        return redirect("/driver")
+    else:
+        return redirect("/map")
 
 @app.route('/login', methods=['GET'])
 def show_login_form():
@@ -82,7 +101,7 @@ def login_process():
     flash("Logged in")
     return redirect("/driver_or_rider")
 
-@app.route('/driver_or_rider', methods=['GET'])
+@app.route('/driver_or_rider', methods=['POST'])
 def is_user_driver_or_rider():
 
     return render_template("driving_or_riding.html")
@@ -105,9 +124,17 @@ def driving_map():
     payload_2 = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': end_address}
     info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2)
 
-    binary = info_2.content
+    extract_data_fordb(info)
+    extract_data_fordb(info_2)
+
+    return redirect("/thank_you")
+
+def extract_data_fordb(data):
+    
+    binary = data.content
     output = json.loads(binary)
 
+    app.logger.debug(json.dumps(output, indent=4))
 
     results = output['results'][0]
     latitude = results['geometry']['location']['lat']
@@ -119,8 +146,7 @@ def driving_map():
     state = results['address_components'][5]['short_name']
     zip_code = results['address_components'][7]['short_name']
     street_address = (street_number + ' ' + street_name)
-    arrival_time=request.form['arrival_time']
-    num_seats=request.form['num_seats']
+    
     name_of_place = None
 
 
@@ -146,8 +172,10 @@ def driving_map():
     # db.session.add(driving_route)
     
 
-    return redirect("/thank_you")
     
+    
+    # arrival_time=request.form['arrival_time']
+    # num_seats=request.form['num_seats']
 
 @app.route('/rider', methods=['GET'])
 def rider_mapwithroutes():

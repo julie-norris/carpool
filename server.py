@@ -28,21 +28,22 @@ def registration():
 
     return render_template("registration.html")
 
-@app.route('/register_newperson', methods=['POST', 'GET'])
+@app.route('/register_newperson', methods=['POST'])
 def add_new_user():
     """Creates a new user in the database."""
+
     driver_or_rider = request.form["typeofuser"]
     email = request.form["email"]
     password = request.form["password"]
-    fname = request.form["first_name"]
-    lname = request.form["last_name"]
+    fname = request.form["fname"]
+    lname = request.form["lname"]
     phone = request.form["phone_number"]
     license_number = request.form["license_number"]
 
     match = re.match(r'^[a-zA-Z0-9 -]{5,9}$', license_number)
 
     if not match:
-        flash("Invalid license_number. Try again.")
+        flash("Invalid license number. Try again.")
         return redirect("/register")
 
     user = Person.query.filter_by(email=email).first()
@@ -57,7 +58,7 @@ def add_new_user():
             password=password,
             fname=fname,
             lname=lname,
-            phone=phone_number, 
+            phone=phone, 
             license_number=license_number
             )
 
@@ -70,10 +71,9 @@ def add_new_user():
     flash("Thank you for registering for CarPool! You have been logged in!")
     
     if driver_or_rider == 'driver':
-
         return redirect("/driver")
     else:
-        return redirect("/map")
+        return redirect("/rider")
 
 @app.route('/login', methods=['GET'])
 def show_login_form():

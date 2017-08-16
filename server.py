@@ -186,7 +186,7 @@ def extract_data_fordb(data):
 
 
 
-def create_drivingroute():
+def create_drivingroute(people):
 
     arrival_time=request.form['arrival_time']
     num_seats=request.form['num_seats']

@@ -123,6 +123,11 @@ def driver_letsgo():
 
 @app.route('/map', methods=['POST'])
 def driving_map():
+    time_input = request.form.get('arrival_time')
+    date_input = request.form.get('date')
+    date_time = date_input + "|" + time_input
+    print '\n\n*** LOOOOOOKKK****\n\n'
+    print datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
     
     start_address=request.form.get("originInput")
     payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': start_address}
@@ -133,13 +138,13 @@ def driving_map():
     info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2)
 
     time_input = request.form.get('arrival_time')
-    arrival_time = datetime.strptime(time_input, '%I:%M %p')
+    # arrival_time = datetime.strptime(time_input, '%I:%M %p')
     num_seats=int(request.form.get('num_seats'))
     
     
     start_address = extract_data_fordb(info)
     end_address = extract_data_fordb(info_2)
-    create_drivingroute(start_address, end_address, arrival_time, num_seats)
+    # create_drivingroute(start_address, end_address, arrival_time, num_seats)
     return redirect("/thank_you")
 
 def extract_data_fordb(data):
@@ -215,6 +220,8 @@ def create_drivingroute(start_address, end_address,
 def rider_mapwithroutes():
 
     return render_template("map_routes.html")
+
+
 
 # @app.route('/map_route') ## Need to pass in the variables from the Let's Go form)
 # def showmap_and_availablerides():

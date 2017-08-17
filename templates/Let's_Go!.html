@@ -31,6 +31,12 @@
 #pac-destination-input: focus, {
   border-color: #4d90fe;
 }
+#datepicker: focus, {
+  font-family: Helvetica;
+  font-weight: 100;
+  color:#333;
+  text-align:center;
+}
 </style>
 </head>
 
@@ -87,7 +93,13 @@
           }
          });
       }
-</script> 
+</script>
+
+    <!-- Load jQuery JS -->
+
+    <!-- Load jQuery UI Main JS  -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
 
 <body>
 <form id='form' action="/map", method='POST'>
@@ -105,9 +117,11 @@
   <button id="getroute" type="button"> Get Directions</button>
   <div id="map"></div>
 
-  <div>
-    <h1>What time will you arrive?</h1>
-    <input type="text" id="time" class="form-control" data-format="HH:mm" data-template="HH : mm" name="arrival_time">
+  <div id="datepicker">
+    <h1>Date and Time:</h1>
+    <p>Date: <input type="date" name='date' ></p>
+     <p>Arrival Time (use only 15 minute increments): <input type="time" name="arrival_time"></p>
+    
   </div>
 
     <br>

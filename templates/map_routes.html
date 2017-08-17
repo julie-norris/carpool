@@ -14,6 +14,8 @@
       <div id="map"></div>
       <script>
       var map, infoWindow;
+      var directionsService;
+      
 
       function initMap() {
         var myLatLong = {lat:37.765, lng:-122.241 };
@@ -21,8 +23,9 @@
           zoom: 15,
           center: myLatLong
         });
+        directionsService = new google.maps.DirectionsService();
         infoWindow = new google.maps.InfoWindow;
-
+        new AutocompleteDirectionsHandler(map);
     }
 
       if (navigator.geolocation) {
@@ -52,8 +55,20 @@
         //     infowindowContent.children['place-address'].textContent =
         //         place.formatted_address;
         //     infowindow.open(map, marker);
-         
+      function AutocompleteDirectionsHandler(map) {
+        this.map = map;
+        this.destinationPlaceID = null;
+        this.travelMode = 'DRIVING';
+        var rider_destination = document.getElementById('rider_destination');
 
+        var destinationAutocomplete = new google.maps.places.Autocomplete(rider_destination, {placeIdOnly: true});
+
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(rider_destination);
+ 
+      }
+      
+
+  
       function handleLocationError(browserHasGeolocation,  infoWindow, pos) {
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
@@ -65,13 +80,17 @@
     </script>
 <form>    
     <div>
-      <label>What is your destination?</label>
-      <input type='text' id='destination'>
+      <label>Please input your destination address:</label>
+      <input type='text' id='rider_destination' >
     </div>
 
     <div>
-      <label>What time do you want to arrive?</label>
-      <input type="text" id="time" class="form-control" data-format="HH:mm" data-template="HH : mm" name="arrival_time">
+      <h1>What date and time do you want to arrive?</h1>
+      <div id="datepicker">
+    <p>Date: <input type="date" name='date' ></p>
+     <p>Arrival Time (use only 15 minute increments): <input type="time" name="arrival_time"></p>
+    
+  </div>
   </div>
   <br>
     <br>
@@ -79,7 +98,9 @@
 </form>      
     </body>
   <script src="https://code.jquery.com/jquery.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&callback=initMap"
+  <script> $('#rider_destination').on('blur', AutocompleteDirectionsHandler);</script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&callback=initMap&libraries=places"
         async defer></script>
   
   

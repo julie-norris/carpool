@@ -59,9 +59,6 @@ class Driving_Route(db.Model):
     num_seats = db.Column(db.Integer, nullable=False)#### Limited range - 1-6###
 
     
-    ####define relationships###
-    # starting_address = db.relationship('Address', backref='driving_routes')
-    # end_address = db.relationship('Address', backref='driving_routes')
     driver = db.relationship('Person', backref='driving_routes')
 
 

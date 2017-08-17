@@ -211,29 +211,10 @@ def create_drivingroute(start_address, end_address,
     db.session.add(driving_route)
     db.session.commit()
 
-    # driving_route = Driving_Route(arrival_time=arrival_time, num_seats=num_seats,
-                                # driver_id=user_id)
-    # after get addresses, create a row in the driver table and with the driver ID from the session
-    # will have the arrival time and number of seats. 
-    
-    # db.session.add(driving_route)
-    
-    
-
-    
-
-
-
 @app.route('/rider', methods=['GET'])
 def rider_mapwithroutes():
 
     return render_template("map_routes.html")
-
-# @app.route('/lets_go')
-# def create_profile():
-#     """Create a Route for a user."""
-
-#     return render_template("Let's_Go!.html")
 
 # @app.route('/map_route') ## Need to pass in the variables from the Let's Go form)
 # def showmap_and_availablerides():

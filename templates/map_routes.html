@@ -33,7 +33,7 @@
           };
 
           infoWindow.setPosition(pos);
-          infoWindow.setContent('Location found.');
+          infoWindow.setContent('You are Here!');
           infoWindow.open(map);
           map.setCenter(pos);
         }, function() {
@@ -63,9 +63,20 @@
       }
 
     </script>
+<form>    
+    <div>
+      <label>What is your destination?</label>
+      <input type='text' id='destination'>
+    </div>
 
-      <a>Here is your route!</a>
-      
+    <div>
+      <label>What time do you want to arrive?</label>
+      <input type="text" id="time" class="form-control" data-format="HH:mm" data-template="HH : mm" name="arrival_time">
+  </div>
+  <br>
+    <br>
+      <input type="submit">
+</form>      
     </body>
   <script src="https://code.jquery.com/jquery.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&callback=initMap"

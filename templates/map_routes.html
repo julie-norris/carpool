@@ -11,25 +11,22 @@
     </style>
   </head>
     <body>
-      <div id="map"></div>
-       <label>Please input your destination address:</label>
+      <br>
+      <span> <label>Please input your destination address:</label>
+      </span>
+      <br>
+
+      <div id="map">
+       </div>
       <script>
       var map, infoWindow;
       var directionsService;
+      var marker;
       
 
       function initMap() {
-        var myLatLong = {lat:37.765, lng:-122.241 };
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 15,
-          center: myLatLong
-        });
-        directionsService = new google.maps.DirectionsService();
-        infoWindow = new google.maps.InfoWindow;
-        new AutocompleteDirectionsHandler(map);
-    }
-
-      if (navigator.geolocation) {
+         var myLatLong = {lat:37.765, lng:-122.241 };
+         if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           var pos = {
             lat: position.coords.latitude,
@@ -46,6 +43,18 @@
       } else {
         handleLocationError(false, infoWindow, map.getCenter());
       }
+        
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: myLatLong
+        });
+
+        directionsService = new google.maps.DirectionsService();
+        infoWindow = new google.maps.InfoWindow();
+        new AutocompleteDirectionsHandler(map);
+    }
+
+     
         // marker.setPlace({
         //       placeId: place.place_id,
         //       location: place.geometry.location
@@ -65,6 +74,27 @@
         var destinationAutocomplete = new google.maps.places.Autocomplete(rider_destination, {placeIdOnly: true});
 
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(rider_destination);
+
+        destinationAutocomplete.addListener('place_changed', function() {
+          var place = destinationAutocomplete.getPlace(); 
+          
+          var service = new google.maps.places.PlacesService(map);
+            service.getDetails({
+            placeId: place.place_id
+          }, function(result, status) {
+          if (status != google.maps.places.PlacesServiceStatus.OK) {
+            alert(status);
+          return;
+          }
+
+          marker = new google.maps.Marker({
+          position: result.geometry.location,
+          map: map
+            });
+
+         });
+
+       });
  
       }
       
@@ -98,9 +128,8 @@
 </form>      
     </body>
   <script src="https://code.jquery.com/jquery.js"></script>
-  <script> $('#rider_destination').on('blur', AutocompleteDirectionsHandler);</script>
-
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&callback=initMap&libraries=places"
+  
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&callback=initMap&libraries=places, geometry"
         async defer></script>
   
   

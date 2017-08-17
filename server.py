@@ -6,6 +6,9 @@ from flask import Flask, request, jsonify, render_template, flash, session, redi
 from flask_debugtoolbar import DebugToolbarExtension
 from model import db, connect_to_db, Person, Address, Driving_Route, User_Address, Ride, Ride_Need
 import re
+from datetime import datetime, time
+
+
 
 app = Flask(__name__)
 
@@ -19,6 +22,7 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage"""
 
+    
     return render_template("homepage.html")
 
 
@@ -66,7 +70,7 @@ def add_new_user():
     db.session.commit()
 
 #  NEED SOMETHING HERE TO MAKE SURE THEY ARE LOGGED IN -- IS THIS ENOUGH:
-    session["email"] = user.email 
+    session["user_id"] = user.user_id 
     
     flash("Thank you for registering for CarPool! You have been logged in!")
     
@@ -121,7 +125,6 @@ def driver_letsgo():
 def driving_map():
     
     start_address=request.form.get("originInput")
-### HOW DO I ADD BOTH SETS OF INFO - start_addresses and end_addresses ###
     payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': start_address}
     info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
     
@@ -129,10 +132,14 @@ def driving_map():
     payload_2 = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': end_address}
     info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2)
 
-    extract_data_fordb(info)
-    extract_data_fordb(info_2)
-    create_drivingroute()
-
+    time_input = request.form.get('arrival_time')
+    arrival_time = datetime.strptime(time_input, '%I:%M %p')
+    num_seats=int(request.form.get('num_seats'))
+    
+    
+    start_address = extract_data_fordb(info)
+    end_address = extract_data_fordb(info_2)
+    create_drivingroute(start_address, end_address, arrival_time, num_seats)
     return redirect("/thank_you")
 
 def extract_data_fordb(data):
@@ -183,15 +190,21 @@ def extract_data_fordb(data):
     
         db.session.add(address)
         db.session.commit()
+    return address
 
+    
+def create_drivingroute(start_address, end_address, 
+                        arrival_time, num_seats):
 
+    driver_id=session.get("user_id")
 
-def create_drivingroute(people):
+    start_add_id = start_address.add_id
+    end_add_id = end_address.add_id
 
-    arrival_time=request.form['arrival_time']
-    num_seats=request.form['num_seats']
     driving_route = Driving_Route(
-        driver_id=people.user_id,
+        driver_id=driver_id,
+        start_add_id=start_add_id,
+        end_add_id=end_add_id,
         arrival_time=arrival_time,
         num_seats=num_seats)
 

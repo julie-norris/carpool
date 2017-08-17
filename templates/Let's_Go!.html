@@ -31,12 +31,15 @@
 #pac-destination-input: focus, {
   border-color: #4d90fe;
 }
+</style>
+</head>
+
 
 </style>
 <script>
-     var directionsDisplay;
-     
      var map;
+     var directionsService; 
+     var directionsDisplay;
      
     
       function initMap() {
@@ -46,10 +49,11 @@
           mapTypeID: 'ROADMAP',
           center: {lat: 37.765, lng: -122.241}
         });
-       
+        directionsService = new google.maps.DirectionsService();
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        directionsDisplay.setMap(map);
         new AutocompleteDirectionsHandler(map);
       }
-
 
       function AutocompleteDirectionsHandler(map) {
         this.map = map;
@@ -71,12 +75,10 @@
       function calcRoute() {
         var start = document.getElementById('pac-origin-input').value;
         var end = document.getElementById('pac-destination-input').value;
-        var directionsService = new google.maps.DirectionsService();
-        var directionsDisplay = new google.maps.DirectionsRenderer();
-        directionsDisplay.setMap(map);
+        
         var request = {
-          origin: originInputAutocomplete,
-          destination: destinationInputAutocomplete,
+          origin: start,
+          destination: end,
           travelMode: 'DRIVING'
         };
         directionsService.route(request, function(response, status) {
@@ -85,49 +87,29 @@
           }
          });
       }
-  
-</script>
-<script src="https://code.jquery.com/jquery.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&libraries=places&callback=initMap"
-        async defer></script>
-<script src="https://code.jquery.com/jquery.js"></script> 
-<script> $('#getroute').on('button', calcRoute);</script>
+</script> 
 
-<script> $('#form').on('submit', function (evt) {
-      evt.preventDefault();
-        var input=$('#pac-origin-input').val();
-        $('#start').val(input);
-        var otherinput=$('#pac-destination-input').val();
-        $('#end').val(otherinput);
-
-
-        $(this).submit();
-});
-</script>
-
-
-</head>
 <body>
 <form id='form' action="/map", method='POST'>
-  <input id="end" name="end" type='hidden'>
+  <input id="end" name="end" type='hidden'>  
   <span id="destination"> 
     <h1>Where are you going?</h1>
-    <input  id="pac-destination-input" name="destinationInput" class="controls" type="text" placeholder="Destination?" value="AT&T Park, Willie Mays Plaza, San Francisco, CA, United States">
+    <input  id="pac-destination-input" name="destinationInput" class="controls" type="text" placeholder="Destination?" >
   </span>
   <br>
   <input id="start" name="start" type='hidden'>
   <div id="start-address">
     <h1>What is your starting address?</h1> 
-    <input id="pac-origin-input" name="originInput" class="controls" type="text" placeholder="Where are you starting from?" value="Disneyland Park, Disneyland Drive, Anaheim, CA, United States">
+    <input id="pac-origin-input" name="originInput" class="controls" type="text" placeholder="Where are you starting from?" >
   </div>
   <button id="getroute" type="button"> Get Directions</button>
   <div id="map"></div>
-  
-  <div id="timeSelect">
+
+  <div>
     <h1>What time will you arrive?</h1>
-    <input type="time" name="arrival_time" value="08:00:00.00">      
+    <input type="text" id="time" class="form-control" data-format="HH:mm" data-template="HH : mm" name="arrival_time">
   </div>
-  <!-- // THERE WERE SOME NOTES ABOUT USING TIMEPICKER IN BOOTSTRAP ??   -->
+
     <br>
     <br>
     
@@ -139,6 +121,25 @@
     <br>
       <input type="submit">
 </form>
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&libraries=places&callback=initMap"
+        async defer></script>
+<script src="https://code.jquery.com/jquery.js"></script> 
+<script> $('#getroute').on('click', calcRoute);</script>
+
+<script> 
+// $('#form').on('submit', function (evt) {
+//       evt.preventDefault();
+//         var input=$('#pac-origin-input').val();
+//         $('#start').val(input);
+//         var otherinput=$('#pac-destination-input').val();
+//         $('#end').val(otherinput);
+
+
+//         $(this).submit();
+// });
+// </script>
 </body>
 
 

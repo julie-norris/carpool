@@ -110,10 +110,10 @@ def login_process():
     else:
         return redirect("/rider")
 
-@app.route('/driver_or_rider', methods=['POST'])
-def is_user_driver_or_rider():
+# @app.route('/driver_or_rider', methods=['POST'])
+# def is_user_driver_or_rider():
 
-    return render_template("driving_or_riding.html")
+#     return render_template("driving_or_riding.html")
 
 
 @app.route('/driver', methods=['GET'])
@@ -126,7 +126,7 @@ def driving_map():
     time_input = request.form.get('arrival_time')
     date_input = request.form.get('date')
     date_time = date_input + "|" + time_input
-    print '\n\n*** LOOOOOOKKK****\n\n'
+    
     print datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
     
     start_address=request.form.get("originInput")
@@ -138,13 +138,13 @@ def driving_map():
     info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2)
 
     time_input = request.form.get('arrival_time')
-    # arrival_time = datetime.strptime(time_input, '%I:%M %p')
+    arrival_time_date = datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
     num_seats=int(request.form.get('num_seats'))
     
     
     start_address = extract_data_fordb(info)
     end_address = extract_data_fordb(info_2)
-    # create_drivingroute(start_address, end_address, arrival_time, num_seats)
+    create_drivingroute(start_address, end_address, arrival_time, num_seats)
     return redirect("/thank_you")
 
 def extract_data_fordb(data):
@@ -216,19 +216,25 @@ def create_drivingroute(start_address, end_address,
     db.session.add(driving_route)
     db.session.commit()
 
+    return driving_route
+
 @app.route('/rider', methods=['GET'])
 def rider_mapwithroutes():
 
     return render_template("map_routes.html")
 
+# @app.ride('/match_ride_rider', methods=['POST'])
+# def create_ride(route_id, ):
 
+#     # user_id = session.get("user_id")
+    # route_id = Driving_Route.query.filter_by('route_id' where user_id = user_id)
+#     # rides = Ride(route_id)
+# # @app.route('/map_route') ## Need to pass in the variables from the Let's Go form)
+# # def showmap_and_availablerides():
 
-# @app.route('/map_route') ## Need to pass in the variables from the Let's Go form)
-# def showmap_and_availablerides():
+# ###DISPLAY MAP WITH ALL THE POSSIBLE ROUTES SHOWN###
 
-###DISPLAY MAP WITH ALL THE POSSIBLE ROUTES SHOWN###
-
-    return redirect('/confirmation')
+#     return redirect('/confirmation')
 
 
 @app.route('/thank_you')

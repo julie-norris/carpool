@@ -109,7 +109,7 @@
       }
 
     </script>
-<form>    
+<form id='rideform' action="/natch_ride_rider" method="POST">    
     <div>
       <input type='text' id='rider_destination' >
     </div>
@@ -119,11 +119,13 @@
       <div id="datepicker">
     <p>Date: <input type="date" name='date' ></p>
      <p>Arrival Time (use only 15 minute increments): <input type="time" name="arrival_time"></p>
-    
-  </div>
-  </div>
+      </div>
+    </div>
+    <div id="seats" type="numeric" >
+      <p>How many seats do you need in the car?</p>
+    </div>
   <br>
-    <br>
+  <br>
       <input type="submit">
 </form>      
     </body>

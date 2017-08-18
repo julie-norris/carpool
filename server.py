@@ -144,7 +144,7 @@ def driving_map():
     
     start_address = extract_data_fordb(info)
     end_address = extract_data_fordb(info_2)
-    create_drivingroute(start_address, end_address, arrival_time, num_seats)
+    create_drivingroute(start_address, end_address, arrival_time_date, num_seats)
     return redirect("/thank_you")
 
 def extract_data_fordb(data):
@@ -182,7 +182,6 @@ def extract_data_fordb(data):
                                       city=city, 
                                       state=state, 
                                       zip_code=zip_code).first()
-
     if not address:
         address = Address(street_address=street_address, 
                           city=city,
@@ -199,7 +198,7 @@ def extract_data_fordb(data):
 
     
 def create_drivingroute(start_address, end_address, 
-                        arrival_time, num_seats):
+                        arrival_time_date, num_seats):
 
     driver_id=session.get("user_id")
 
@@ -210,7 +209,7 @@ def create_drivingroute(start_address, end_address,
         driver_id=driver_id,
         start_add_id=start_add_id,
         end_add_id=end_add_id,
-        arrival_time=arrival_time,
+        arrival_time_date=arrival_time_date,
         num_seats=num_seats)
 
     db.session.add(driving_route)

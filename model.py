@@ -50,9 +50,9 @@ class Driving_Route(db.Model):
                          autoincrement=True,
                          primary_key=True)
     start_add_id = db.Column(db.Integer,
-                             db.ForeignKey('start_addresses.start_address_id'))
+                             db.ForeignKey('addresses.add_id'))
     end_add_id = db.Column(db.Integer, 
-                           db.ForeignKey('end_addresses.end_address_id'))
+                           db.ForeignKey('addresses.add_id'))
     arrival_time_date = db.Column(db.DateTime, nullable=False)###Store in UTC. Will be a pulldown menu with time increments"""
     driver_id = db.Column(db.Integer,
                           db.ForeignKey('people.user_id'))
@@ -60,38 +60,8 @@ class Driving_Route(db.Model):
 
     
     user = db.relationship('Person', backref='driving_routes')
-    start_address = db.relationship('Start_Address', backref='driving_routes')
-    end_address = db.relationship('End_Address', backref='driving_routes')
-
-
-class Start_Address(db.Model):
-    """Start Addresses for Drivers and Riders."""
-
-    __tablename__ = "start_addresses"
-
-    start_address_id = db.Column(db.Integer,
-                                autoincrement=True,
-                                primary_key=True)
-
-    address_id = db.Column(db.Integer,
-                           db.ForeignKey('addresses.add_id'))
-
-    startAddress = db.relationship('Address', backref="start_addresses")
-
-
-class End_Address(db.Model):
-    """End Addresses for Drivers and Riders."""
-
-    __tablename__ = "end_addresses"
-
-    end_address_id = db.Column(db.Integer,
-                                autoincrement=True,
-                                primary_key=True)
-
-    address_id = db.Column(db.Integer,
-                           db.ForeignKey('addresses.add_id'))
-
-    endAddress = db.relationship('Address', backref="end_addresses")
+    start_address = db.relationship('Address', foreign_keys=[start_add_id])
+    end_address = db.relationship('Address', foreign_keys=[end_add_id])
 
 
 

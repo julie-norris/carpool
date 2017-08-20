@@ -140,8 +140,7 @@ def driving_map():
 
     start_address = extract_data_fordb(info)
     end_address = extract_data_fordb(info_2)
-    # create_startaddress(info)
-    # create_endaddress(info_2)
+    
    
     create_drivingroute(start_address, end_address, arrival_time_date, num_seats)
     return redirect("/thank_you")
@@ -195,34 +194,7 @@ def extract_data_fordb(data):
         db.session.commit()
     return address
 
-def create_startaddress(strt):
-    """ Take start_address from user input and add
-        to start address table"""
 
-      if strt in Start_Address:
-        start_address == strt  
-#     session["address_id"] = addresses.address_id
-        
-#     start_address_middle=Start_Address(
-#         address_id=address_id)
-
-#     db.session.add(start_address_middle)
-#     db.session.commit()
-
-#     return start_address_middle    
-
-# def create_endaddress(info_2):
-#     extract_data_fordb(info_2)
-
-#     session["address_id"] = addresses.address_id
-        
-#     end_address_middle=End_Address(
-#         address_id=address_id)
-
-#     db.session.add(end_address_middle)
-#     db.session.commit()
-
-#     return end_address_middle
 
 def create_drivingroute(start_address,
                         end_address, 
@@ -231,8 +203,8 @@ def create_drivingroute(start_address,
 
     driver_id=session.get("user_id")
     
-    # start_add_id = start_address.add_id
-    # end_add_id = end_address.add_id
+    start_add_id = start_address.add_id
+    end_add_id = end_address.add_id
 
     driving_route = Driving_Route(
         driver_id=driver_id,

@@ -108,6 +108,21 @@
         infoWindow.open(map);
       }
 
+    function getRoute() {
+      $.post('/rider' , showRoutes);
+    }
+
+    function showRoutes(routes) {
+      var routes = routes;
+      $('#showroutes').html(route); 
+    }
+    // I don't think .html is what I want here. Needs to be a link. 
+
+    
+
+    getRoute();
+
+
     </script>
 <form id='rideform' action="/match_ride_rider" method="POST">    
     <div>
@@ -127,7 +142,11 @@
   <br>
   <br>
       <input type="submit">
-</form>      
+</form>  
+
+  <div id="showroutes">
+    <p>Routes that match your ride needs will be displayed here:</p>
+  </div>   
     </body>
   <script src="https://code.jquery.com/jquery.js"></script>
   

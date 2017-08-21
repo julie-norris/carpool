@@ -227,15 +227,24 @@ def rider_mapwithroutes():
     return render_template("map_routes.html")
 
 @app.route('/match_ride_rider', methods=['POST'])
-def ride(num_seats):
-    time_input = request.form.get('arrival_time')
-    date_input = request.form.get('date')
-    date_time = date_input + "|" + time_input
-    arrival_time_date = datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
+def rider():
+
+    rider = session.get("user_id")
+    destination = request.form["rider_destination"]
+    arrival_time_date = request.form["arrival_time_date"]
+    seats_needed = request.form["num_seats"]
+ # Question here - how to match the inputs and query results; ie. arrival_time_date
+  # is a string. And the result of the query is a datetime object. need to match them.
+ # similarly the destination input needs to match the end_add_id.. this probably
+ # happens on a middle table but not sure how. 
     
-    user_id = session.get("user_id")
-    # route_id = Driving_Route.query.filter_by('route_id' where user_id = user_id)
-#     # rides = Ride(route_id)
+    routes = Driving_Route.query.filter_by(num_seats=seats_needed,
+                                            arrival_time_date=arrival_time_date,
+                                            destination=end_add_id).all()
+
+    return jsonify(routes)
+# Here I need to take the routes that were identified as matches and display them
+# on the rider's map page. I think this is where I need AJAX
 
 
 

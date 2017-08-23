@@ -123,7 +123,6 @@ def driving_map():
     date_input = request.form.get('date')
     date_time = date_input + "|" + time_input
     
-    print datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
     
     start_address=request.form.get("originInput")
     payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': start_address}
@@ -133,7 +132,7 @@ def driving_map():
     payload_2 = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': end_address}
     info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2)
 
-    # time_input = request.form.get('arrival_time')
+    
     arrival_time_date = datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
     num_seats=int(request.form.get('num_seats'))
 
@@ -226,38 +225,120 @@ def rider_mapwithroutes():
 
     return render_template("map_routes.html")
 
-@app.route('/match_ride_rider', methods=['POST'])
+@app.route('/match_ride_rider', methods=['GET'])
 def rider():
 
-    rider = session.get("user_id")
-    destination = request.form["rider_destination"]
-    arrival_time_date = request.form["arrival_time_date"]
-    seats_needed = request.form["num_seats"]
- # Question here - how to match the inputs and query results; ie. arrival_time_date
-  # is a string. And the result of the query is a datetime object. need to match them.
- # similarly the destination input needs to match the end_add_id.. this probably
- # happens on a middle table but not sure how. 
+    # rider = session.get("user_id")
+    destination = request.args.get("rider_destination1")
+    payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': destination}
+    info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
+    binary = info.content
+    output = json.loads(binary)
+    app.logger.debug(json.dumps(output, indent=4))
     
-    routes = Driving_Route.query.filter_by(num_seats=seats_needed,
-                                            arrival_time_date=arrival_time_date,
-                                            destination=end_add_id).all()
 
-    return jsonify(routes)
+    results = output['results'][0]
+    latitude = results['geometry']['location']['lat']
+    longitude = results['geometry']['location']['lng']
+    street_number = None
+    street_name = None
+    city = None
+    state = None
+    zip_code = None
+
+    for address_components in results['address_components']:
+        
+        if address_components['types'][0]=='street_number':
+            street_number=address_components['short_name']
+        if address_components['types'][0]=='route':
+            street_name=address_components['short_name']
+        if address_components['types'][0]=='locality':
+            city=address_components['short_name']
+        if address_components['types'][0]=="administrative_area_level_1":
+            state=address_components['short_name']
+        if address_components['types'][0]=="postal_code":
+            zip_code=address_components['short_name']
+
+    street_address = "{num} {name}".format(num=street_number, name=street_name)
+
+    address = Address.query.filter_by(street_address=street_address, 
+                                      city=city, 
+                                      state=state, 
+                                      zip_code=zip_code).first()
+    if street_address == address.street_address:
+        destination = address.add_id
+
+    if not address:
+        address = Address(street_address=street_address, 
+                          city=city,
+                          state=state,
+                          zip_code=zip_code,
+                          latitude=latitude,
+                          longitude=longitude,
+                          name_of_place=None)
+    
+        
+        db.session.add(address)
+        db.session.commit()
+
+        destination = address.add_id
+    
+
+    print destination
+  
+
+    destination = address.add_id
+    time_input = request.args.get('time')
+    date_input = request.args.get('date')
+    date_time = date_input + "|" + time_input
+    arrival_time_date = datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
+    seats_needed = int(request.args.get("num_seats"))
+ 
+  # see if the destination address of rider is already in the addresses database; then 
+  # get the add_id and match it to the end_add_id from the Driving Route
+
+    sql = """SELECT * 
+    FROM driving_routes AS dr
+    WHERE dr.end_add_id = :dest_needed
+    AND dr.arrival_time_date = :time_needed
+    AND :seats_needed <= dr.num_seats - (SELECT COUNT(*)
+                                        FROM rides as r
+                                        WHERE r.route_id = dr.route_id)"""
+
+    available_routes = db.session.execute(sql, {"dest_needed": destination,
+                                                "time_needed": arrival_time_date,
+                                                "seats_needed": seats_needed}).fetchall()
+    print available_routes
+
+    return render_template('ride_links.html', routes=available_routes)
+    #create form with a link and a claim button
+    # claim button will go to the route and take the user id and the route
+    # id and put that into the rides table...jinja for loop; claim buttons would
+    # be their own little forms with hidden inputs or use attributes. 
+
 # Here I need to take the routes that were identified as matches and display them
 # on the rider's map page. I think this is where I need AJAX
 
 
+@app.route('/get_ride', methods=['POST'])
+def create_ridetaken():
 
+    route_id = request.form.get('route_id')
+    rider = request.form.get('user_id')
 
+    ride = Ride(route_id=route_id,
+                rider=rider)
 
+    db.session.add(ride)
+    db.session.commit()
 
-
+    return redirect('/confirmation')
 # # @app.route('/map_route') ## Need to pass in the variables from the Let's Go form)
 # # def showmap_and_availablerides():
 
 # ###DISPLAY MAP WITH ALL THE POSSIBLE ROUTES SHOWN###
 
-#     return redirect('/confirmation')
+    
 
 
 @app.route('/thank_you')
@@ -267,7 +348,8 @@ def thanks():
 
 @app.route('/confirmation')
 def confirmsdriver_and_rider():
-    pass
+    
+    return render_template('confirmation.html')
 
 @app.route('/logout')
 def logout():

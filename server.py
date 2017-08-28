@@ -283,8 +283,6 @@ def rider():
 
         destination = address.add_id
     
-
-    print destination
   
 
     destination = address.add_id
@@ -300,7 +298,7 @@ def rider():
     sql = """SELECT * 
     FROM driving_routes AS dr
     WHERE dr.end_add_id = :dest_needed
-    AND dr.arrival_time_date = :time_needed
+    AND dr.arrival_time_date < :time_needed
     AND :seats_needed <= dr.num_seats - (SELECT COUNT(*)
                                         FROM rides as r
                                         WHERE r.route_id = dr.route_id)"""
@@ -308,8 +306,7 @@ def rider():
     available_routes = db.session.execute(sql, {"dest_needed": destination,
                                                 "time_needed": arrival_time_date,
                                                 "seats_needed": seats_needed}).fetchall()
-    print available_routes
-
+    available_routes = [Driving_Route.query.get(available_route[0]) for available_route in available_routes]
     return render_template('ride_links.html', routes=available_routes)
     #create form with a link and a claim button
     # claim button will go to the route and take the user id and the route

@@ -20,8 +20,16 @@ class Person(db.Model):
     license_number = db.Column(db.String(20), nullable=False)
 
     
-
-
+    @property
+    def serialize(self):
+        "returns data in easibly jsonifiable format"
+        return {
+            "user_id": self.user_id,
+            "email": self.email,
+            "name": "{} {}".format(self.fname, self.lname),
+            "phone": self.phone,
+            "license_number": self.license_number
+        }
 
 class Address(db.Model):
     """ Stores all addresses """

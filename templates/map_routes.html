@@ -8,6 +8,10 @@
         height: 400px;
         width: 100%;
        }
+       #rider_destination {
+        height: 25px;
+        width: 250px;
+       }
     </style>
   </head>
     <body>
@@ -22,9 +26,12 @@
       var map, infoWindow;
       var directionsService;
       var marker;
+      var bounds;
+      var currPos;
       
 
       function initMap() {
+
          var myLatLong = {lat:37.765, lng:-122.241 };
          if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -32,7 +39,7 @@
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
-
+          currPos = pos;
           infoWindow.setPosition(pos);
           infoWindow.setContent('You are Here!');
           infoWindow.open(map);
@@ -52,6 +59,9 @@
         directionsService = new google.maps.DirectionsService();
         infoWindow = new google.maps.InfoWindow();
         new AutocompleteDirectionsHandler(map);
+
+        
+
     }
 
     
@@ -83,7 +93,10 @@
                      position: result.geometry.location,
                      map: map
                  });
-
+                bounds = new google.maps.LatLngBounds();
+                bounds.extend(currPosF);
+                bounds.extend(marker.position);
+                map.fitBounds(bounds);
              });
 
          });
@@ -105,7 +118,7 @@
     </script>
 <form id='rideform' action="/match_ride_rider" method="GET">
     <div>
-        <input type='text' id='rider_destination' name='rider_destination'>
+        <input type='text' id='rider_destination' name='rider_destination' placeholder="What is your destination?">
         <input type='hidden' id='rider_destination1' name='rider_destination1'>
     </div>
 

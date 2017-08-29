@@ -131,8 +131,17 @@ class Ride_Need(db.Model):
 
     ###Define Relationships####
     user = db.relationship("Person", backref='ride_needs')
-    # start = db.relationship('Address', backref='ride_needs')
-    # end = db.relationship('Address', backref='ride_needs')
+    
+    @property
+    def serialize(self):
+        "returns data in easibly jsonifiable format"
+        return {
+            "user_id": self.people.user_id,
+            "email": self.people.email,
+            "name": "{} {}".format(self.people.fname, self.people.lname),
+            "phone": self.people.phone
+        }
+
 
 
 

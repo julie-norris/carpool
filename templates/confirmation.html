@@ -2,21 +2,23 @@
 {% block content %}
 
 
-<body>
-<p>
-    Drivers and Riders: 
-        Please confirm your arrangements via text message or email.
-    <br><br>
-    
-    Driver:
-    <input type='text' id='user' 
-    name='user_email'>
-    <br>
-    <br>
-    Rider:
-     <input type='text' id='user' 
-    name='user_email'>
-</body>
+    {% if ride %} 
+    <form  id='confirmation' action="/logout" method="GET">   
+    <p>Drivers and Riders: <br>
+    Please confirm your arrangements via text message or email.
+    <br><br> 
+
+        Driver: {{ driver.fname }} {{ driver.lname }} | {{driver.email}} | {{ driver.phone }}
+        <br><br>
+        Rider: {{ rider.fname }} {{rider.lname}} | {{ rider.email }} | {{ rider.phone }}</p>
+   
+        <input type='hidden' id='driver' 
+        name='user_info'>
+        <input type='hidden' id='rider' 
+        name='user_info'>
+    </form>
+    {% endif %}
+
 
 
 {% endblock %}

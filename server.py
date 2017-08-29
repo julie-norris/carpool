@@ -234,7 +234,9 @@ def rider():
     info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
     binary = info.content
     output = json.loads(binary)
-    app.logger.debug(json.dumps(output, indent=4))
+    
+    # No longer needed; left here for future reference:
+    # app.logger.debug(json.dumps(output, indent=4))
     
 
     results = output['results'][0]
@@ -298,7 +300,7 @@ def rider():
     sql = """SELECT * 
     FROM driving_routes AS dr
     WHERE dr.end_add_id = :dest_needed
-    AND dr.arrival_time_date < :time_needed
+    AND dr.arrival_time_date <= :time_needed
     AND :seats_needed <= dr.num_seats - (SELECT COUNT(*)
                                         FROM rides as r
                                         WHERE r.route_id = dr.route_id)"""
@@ -307,11 +309,9 @@ def rider():
                                                 "time_needed": arrival_time_date,
                                                 "seats_needed": seats_needed}).fetchall()
     available_routes = [Driving_Route.query.get(available_route[0]) for available_route in available_routes]
+    
     return render_template('ride_links.html', routes=available_routes)
-    #create form with a link and a claim button
-    # claim button will go to the route and take the user id and the route
-    # id and put that into the rides table...jinja for loop; claim buttons would
-    # be their own little forms with hidden inputs or use attributes. 
+    
 
 # Here I need to take the routes that were identified as matches and display them
 # on the rider's map page. I think this is where I need AJAX
@@ -328,15 +328,13 @@ def create_ridetaken():
 
     db.session.add(ride)
     db.session.commit()
-
-    return redirect('/confirmation')
+# put the ride in the session to use in the confirmation page
+    session["ride"] = (ride.route_id, ride.rider)
+    return redirect("/confirmation")
 # # @app.route('/map_route') ## Need to pass in the variables from the Let's Go form)
 # # def showmap_and_availablerides():
 
 # ###DISPLAY MAP WITH ALL THE POSSIBLE ROUTES SHOWN###
-
-    
-
 
 @app.route('/thank_you')
 def thanks():
@@ -345,8 +343,20 @@ def thanks():
 
 @app.route('/confirmation')
 def confirmsdriver_and_rider():
+# get the ride from the session
+    ride = session.get("ride")
+# query the session 'ride' to get the route_id which can be used to get the driver
+# object
+    driving_route = Driving_Route.query.get(ride[0])
+    driver = driving_route.user
+# get the person object that matches the rider; ride[1] = the index of the rider in the
+# session 'ride'
+    rider = Person.query.get(ride[1]) 
     
-    return render_template('confirmation.html')
+
+    return render_template('confirmation.html', driver=driver, 
+                                                ride=ride,
+                                                rider=rider)
 
 @app.route('/logout')
 def logout():

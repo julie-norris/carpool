@@ -7,7 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import db, connect_to_db, Person, Address, Driving_Route, User_Address, Ride, Ride_Need
 import re
 from datetime import datetime, time
-
+from time import sleep
 
 
 app = Flask(__name__)
@@ -126,11 +126,16 @@ def driving_map():
     
     start_address=request.form.get("originInput")
     payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': start_address}
-    info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
+    app.logger.info(start_address)
+    app.logger.info(payload)
+    try:
+        info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload, timeout=3.0)
+    except requests.exceptions.ConnectionError as e:
+        app.logger.error("Couldn't connect to google maps: {}".format(e.msg))
     
     end_address=request.form.get("destinationInput")
     payload_2 = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': end_address}
-    info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2)
+    info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2, timeout=3.0)
 
     
     arrival_time_date = datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
@@ -231,7 +236,15 @@ def rider():
     # rider = session.get("user_id")
     destination = request.args.get("rider_destination1")
     payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': destination}
-    info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
+    info = None
+    while info is None:
+        try:        
+            info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
+        except:
+            sleep(1)
+            continue
+
+
     binary = info.content
     output = json.loads(binary)
     

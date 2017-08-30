@@ -72,6 +72,19 @@ class Driving_Route(db.Model):
     end_address = db.relationship('Address', foreign_keys=[end_add_id])
 
 
+    @property
+    def serialize(self):
+        "returns data in easibly jsonifiable format"
+        return {
+            "route_id": self.route_id,
+            "start_add_id": self.start_add_id,
+            "end_add_id": self.end_add_id,
+            "arrival_time_date": self.arrival_time_date,
+            "driver_id": self.driver_id,
+            "num_seats": self.num_seats
+        }
+
+
 
 class User_Address(db.Model):
     """Addresses linked to a specific user."""

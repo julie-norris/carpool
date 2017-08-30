@@ -232,19 +232,12 @@ def rider_mapwithroutes():
 
 @app.route('/match_ride_rider', methods=['GET'])
 def rider():
+    """Finds a ride for the rider and displays options"""
 
     # rider = session.get("user_id")
     destination = request.args.get("rider_destination1")
     payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': destination}
-    info = None
-    while info is None:
-        try:        
-            info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
-        except:
-            sleep(1)
-            continue
-
-
+    info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
     binary = info.content
     output = json.loads(binary)
     
@@ -323,9 +316,10 @@ def rider():
                                                 "seats_needed": seats_needed}).fetchall()
     available_routes = [Driving_Route.query.get(available_route[0]) for available_route in available_routes]
     
+    # data = {'available_routes':available_routes}
+    # return jsonify(data)
     return render_template('ride_links.html', routes=available_routes)
     
-
 # Here I need to take the routes that were identified as matches and display them
 # on the rider's map page. I think this is where I need AJAX
 
@@ -373,7 +367,10 @@ def confirmsdriver_and_rider():
 
 @app.route('/logout')
 def logout():
-    pass
+    
+    del session["user_id"]
+    flash("Logged out.")
+    return redirect("/")
 
 
 

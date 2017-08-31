@@ -3,7 +3,7 @@
 
 
     {% if ride %} 
-    <form  id='confirmation' action="/logout" method="GET">   
+    <form  id='confirmation' action="/sms" method="POST">   
     <p>Drivers and Riders: <br>
     Please confirm your arrangements via text message or email.
     <br><br> 
@@ -11,81 +11,14 @@
         Driver: {{ driver.fname }} {{ driver.lname }} | {{driver.email}} | {{ driver.phone }}
         <br><br>
         Rider: {{ rider.fname }} {{rider.lname}} | {{ rider.email }} | {{ rider.phone }}</p>
-   
+        <input type='hidden' id='driver-number' name='d_number' value="{{ driver.phone }}"> 
+        <input type='hidden' id='rider-number' name='r_number' value="{{ rider.phone }}"  
         <input type='hidden' id='driver' 
         name='user_info'>
         <input type='hidden' id='rider' 
         name='user_info'>
+        <input type="submit" value="Confirm and Notify Driver">
     </form>
     {% endif %}
-
-    <script src="https://media.twiliocdn.com/sdk/js/common/v0.1/twilio-common.min.js"></script>
-    <script src="https://media.twiliocdn.com/sdk/js/chat/v1.1/twilio-chat.min.js"></script>
-
-    type="text/javascript" let client = await Twilio.Chat.Client.create(token);
-<!-- Updating your access token -->
-    chatClient.updateToken(token);
-<!-- Integrating the Access Manager Helper -->
-    let AccessManager = require('twilio-common').AccessManager;
-<!-- Initializing Access Manager -->
-    let token = generateToken();
-
-    let accessManager = new AccessManager(token);
-    let chatClient = new ChatClient(token);
-
-    accessManager.on('tokenUpdated', am => {
-<!-- get new token from AccessManager and pass it to the library instance -->
-    chatClient.updateToken(am.token));
-    });
-<!-- Responding to Access Manager's Events -->
-        accessManager.on('tokenExpired', () => {
-<!-- generate new token here and set it to the accessManager -->
-      let updatedToken = generateToken(); 
-      accessManager.updateToken(updatedToken);
-    });
-
-<!-- Create a channel -->
-
-chatClient
-  .createChannel({
-    uniqueName: 'general',
-    friendlyName: 'General Chat Channel',
-  })
-  .then(function(channel) {
-    console.log('Created general channel:');
-    console.log(channel);
-  });
-
-<!-- Join a previously created channel -->
-client.on('channelJoined', function(channel) {
-  console.log("Joined channel " + channel.friendlyName);
-});
-
-myChannel.join().catch(function(err) {
-  console.error("Couldn't join channel " + channel.friendlyName + ' because ' + err);
-});
-
-<!-- Send a message to a previously created Channel -->
-    var msg = $('#chat-input').val();
-    myChannel.sendMessage(msg);
-
-<!-- Get Messages for a previously created channel -->
-channel.getMessages().then(function(messages) {
-  const totalMessages = messages.items.length;
-  for (i = 0; i < totalMessages; i++) {
-    const message = messages.items[i];
-    console.log('Author:' + message.author);
-  }
-  console.log('Total Messages:' + totalMessages);
-});
-
-<!-- Listen for new messages sent to a channel -->
-myChannel.on('messageAdded', function(message) {
-  console.log(message.author, message.body);
-});
-
-
-
-
 
 {% endblock %}

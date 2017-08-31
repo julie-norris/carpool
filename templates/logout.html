@@ -1,1 +1,15 @@
-logout.html
+{% extends 'base.html' %}
+{% block content %}
+
+<p> Are you ready to logout? </p>
+<form class="logout" action="/logout" method='GET'>
+<input type='radio' name='yesno' value='yes'>Yes!<br>
+</form>
+<form class="logout" method='GET'>
+<input type='radio' name='yesno' value='no'> No.<be>
+<p> Please select Driver or Rider to be redirected to the page you need.  </p> 
+</form>
+
+
+
+{% endblock %}

@@ -2,10 +2,12 @@
 {% block content %}
 
     {% if routes %}
-     <form  id='ride_form' action="/get_ride" method="POST">
-                <p>Route:</p><br><br>
-
-        {% for route in routes %}
+    <p>Route:</p>
+    {% for route in routes %}
+     <form  id='ride_form' action="/get_ride/{{route.route_id}}" method="POST">
+                
+        <input type='hidden' id='user' value='{{ session["user_id"] }}' name="user_id" >
+        
             Time: {{route.arrival_time_date}} <br>
             Start: {{ route.start_address.street_address  }}<br>
                    {{ route.start_address.city  }} 
@@ -17,12 +19,10 @@
                  {{ route.end_address.zip_code  }}<br>
 
            
-            <input type='hidden' id='claimride' value='{{ route.route_id }}' name="route_id">
-            <input type='hidden' id='user' value='{{ session["user_id"] }}' name="user_id" >
             <br>
-            <button id="seatreserved">Reserve a Seat!</button>
+            <input type="submit">Reserve a Seat!</button>
             <br>
-            </form>
+            </form><br><br>
         {% endfor %}
     {% else %}
         no routes available

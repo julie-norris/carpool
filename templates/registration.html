@@ -2,17 +2,21 @@
 {% block content %}
 <h1>Please register to use CarPool!</h1>
 
-<form action="/register_newperson" method="POST">
+<form class="form-horizontal" action="/register_newperson" method="POST">
 
-    <div>
+    <div class="form-group">
     
         <h3> New users: </h3>
-            <label>Email:
-                <input type="email" name="email" required>
+            <label for="inputEmail" class="col-sm-2 control-label">Email:
+                <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email"required>
             </label>
-            <label>Password:
-                <input type="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword" class="col-sm-2 control-label">Password:
+                <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password"required>
             </label>
+        </div>
+            
             <label>First Name:
                 <input type="text" name="fname" required>
             </label>

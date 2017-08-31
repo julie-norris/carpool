@@ -8,7 +8,15 @@ from model import db, connect_to_db, Person, Address, Driving_Route, User_Addres
 import re
 from datetime import datetime, time
 from time import sleep
+from twilio.rest import Client
+from twilio.twiml.messaging_response import MessagingResponse
+import os
 
+
+account_sid = os.environ['TWILIO_ACCOUNT_SID']
+auth_token = os.environ['TWILIO_AUTH_TOKEN']
+twilio_number = os.environ['TWILIO_NUMBER']
+client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
 
@@ -324,10 +332,9 @@ def rider():
 # on the rider's map page. I think this is where I need AJAX
 
 
-@app.route('/get_ride', methods=['POST'])
-def create_ridetaken():
+@app.route('/get_ride/<int:route_id>', methods=['POST'])
+def create_ridetaken(route_id):
 
-    route_id = request.form.get('route_id')
     rider = request.form.get('user_id')
 
     ride = Ride(route_id=route_id,
@@ -364,7 +371,19 @@ def confirmsdriver_and_rider():
     return render_template('confirmation.html', driver=driver, 
                                                 ride=ride,
                                                 rider=rider)
+@app.route('/sms', methods=['POST'])
+def sms():
+    driver_number = request.form.get('d_number')
+    num = '+1' + driver_number
+    rider_number = request.form.get('r_number')
+    print rider_number
+    message_body = "Please confirm details with the rider @" + rider_number
 
+    new_message = client.messages.create(to=num,
+                                        from_=twilio_number,
+                                        body=message_body)
+    return redirect('logout.html')
+    
 @app.route('/logout')
 def logout():
     

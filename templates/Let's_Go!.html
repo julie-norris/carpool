@@ -24,7 +24,7 @@
   font-weight: 300;
   margin-left: 12 px;
   padding: 0 11px 0 13px;
-  width: 200px;
+  width: 300px;
 }
 
 #pac-origin-input: focus,
@@ -74,7 +74,7 @@
         var destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput, {placeIdOnly: true});
 
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
-        this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(destinationInput);
+        this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(destinationInput);
       }
  
 
@@ -102,23 +102,30 @@
   
 
 <body>
-<form id='form' action="/map" method='POST'>
-  <input id="end" name="end" type='hidden'>  
-  <span id="destination"> 
-    <h1>Where are you going?</h1>
-    <input  id="pac-destination-input" name="destinationInput" class="controls" type="text" placeholder="Destination?" >
-  </span>
-  <br>
-  <input id="start" name="start" type='hidden'>
-  <div id="start-address">
-    <h1>What is your starting address?</h1> 
-    <input id="pac-origin-input" name="originInput" class="controls" type="text" placeholder="Where are you starting from?" >
+<form class="form-horizontal" id='form' action="/map" method='POST'>
+  <div class="container">
+    <input id="end" name="end" type='hidden'>  
+    <span id="destination"> 
+      <h1>Where are you going?</h1>
+      <input  id="pac-destination-input" name="destinationInput" class="controls" type="text" placeholder="Destination?" >
+    </span>
+    <br>
+    <input id="start" name="start" type='hidden'>
+    <div id="start-address">
+      <h1>Enter your start location and destination:</h1> 
+      <input id="pac-origin-input" name="originInput" class="controls" type="text" placeholder="Where are you starting from?" >
+    </div>
   </div>
-  <button id="getroute" type="button"> Get Directions</button>
+  <div style="background: orange;"> 
+  <div class="row" >
+    <div class="container">
+      <button id="getroute" class="form-control" style="background: #2ba6cb" type="button"> Click here to Get A Driving Route</button>
+    </div>
+  </div>
   <div id="map"></div>
 
   <div id="datepicker">
-    <h1>Date and Time:</h1>
+    <h3>Date and Time of Travel:</h3>
     <p>Date: <input type="date" name='date' ></p>
      <p>Arrival Time (use only 15 minute increments): <input type="time" name="arrival_time"></p>
     
@@ -127,9 +134,15 @@
     <br>
     <br>
     
-  <div id="num_seats">
-    <h1>How many seats do you have available? (1-6)</h1>
-    <input type="number" name="num_seats" value="1" min="1" max="6" step="1">
+<div class="dropdown" id="num_seats">
+  <h3>How many seats do you have available? (1-6)</h3>
+    <select name="num_seats">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>  
   </div>
     <br>
     <br>

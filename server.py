@@ -376,7 +376,7 @@ def sms():
     driver_number = request.form.get('d_number')
     num = '+1' + driver_number
     rider_number = request.form.get('r_number')
-    print rider_number
+    
     message_body = "Please confirm details with the rider @" + rider_number
 
     new_message = client.messages.create(to=num,

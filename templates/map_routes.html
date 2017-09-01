@@ -122,14 +122,14 @@
     </div>
 
     <div>
-        <h1>What date and time do you want to arrive?</h1>
+        <h3>What date and time do you want to arrive?</h3>
         <div id="datepicker">
             <p>Date: <input id="date"type="date" name='date'></p>
             <p>Arrival Time (use only 15 minute increments): <input id="time" type="time" name="time"></p>
         </div>
     </div>
     <div >
-       <p>How many seats do you need in the car?</p><input id="seats" type="number" name="num_seats">  
+       <p>How many seats do you need in the car?</p><input id="seats" type="number" name="num_seats" min="1" max="5">  
     </div><br><br>
     <input type="submit">
 </form>  

@@ -3,22 +3,24 @@
 
 
     {% if ride %} 
-    <form  id='confirmation' action="/sms" method="POST">   
-    <p>Drivers and Riders: <br>
-    Please confirm your arrangements via text message or email.
-    <br><br> 
+    <div class="orange">
+        <form  id='confirmation' action="/sms" method="POST">   
+        <p>Drivers and Riders: <br>
+        Please confirm your arrangements via text message or email.
+        <br><br> 
 
-        Driver: {{ driver.fname }} {{ driver.lname }} | {{driver.email}} | {{ driver.phone }}
-        <br><br>
-        Rider: {{ rider.fname }} {{rider.lname}} | {{ rider.email }} | {{ rider.phone }}</p>
-        <input type='hidden' id='driver-number' name='d_number' value="{{ driver.phone }}"> 
-        <input type='hidden' id='rider-number' name='r_number' value="{{ rider.phone }}"  
-        <input type='hidden' id='driver' 
-        name='user_info'>
-        <input type='hidden' id='rider' 
-        name='user_info'>
-        <input type="submit" value="Confirm and Notify Driver">
-    </form>
+            Driver: {{ driver.fname }} {{ driver.lname }} | {{driver.email}} | {{ driver.phone }}
+            <br><br>
+            Rider: {{ rider.fname }} {{rider.lname}} | {{ rider.email }} | {{ rider.phone }}</p>
+            <input type='hidden' id='driver-number' name='d_number' value="{{ driver.phone }}"> 
+            <input type='hidden' id='rider-number' name='r_number' value="{{ rider.phone }}"  
+            <input type='hidden' id='driver' 
+            name='user_info'>
+            <input type='hidden' id='rider' 
+            name='user_info'>
+            <input type="submit" value="Confirm and Notify Driver">
+        </form>
+    </div>
     {% endif %}
 
 {% endblock %}

@@ -3,6 +3,7 @@
 from jinja2 import StrictUndefined
 import requests, pprint, json
 from flask import Flask, request, jsonify, render_template, flash, session, redirect
+
 from flask_debugtoolbar import DebugToolbarExtension
 from model import db, connect_to_db, Person, Address, Driving_Route, User_Address, Ride, Ride_Need
 import re
@@ -110,6 +111,8 @@ def login_process():
         return redirect("/login")
 
     session["user_id"] = user.user_id
+    session['logged_in'] = True
+    
 
     flash("Logged in")
 
@@ -121,9 +124,14 @@ def login_process():
 
 
 @app.route('/driver', methods=['GET'])
+# add @login_required...
 def driver_letsgo():
-    
+
+    # if current_user.is_authenticated:
     return render_template("Let's_go!.html")
+    # else:
+    #     flash("Please log in!")
+    #     return redirect ("/login")
 
 @app.route('/map', methods=['POST'])
 def driving_map():
@@ -276,7 +284,7 @@ def rider():
             zip_code=address_components['short_name']
 
     street_address = "{num} {name}".format(num=street_number, name=street_name)
-
+    print street_address
     address = Address.query.filter_by(street_address=street_address, 
                                       city=city, 
                                       state=state, 
@@ -378,18 +386,38 @@ def sms():
     rider_number = request.form.get('r_number')
     
     message_body = "Please confirm details with the rider @" + rider_number
-
-    new_message = client.messages.create(to=num,
+    try:
+        new_message = client.messages.create(to=num,
                                         from_=twilio_number,
                                         body=message_body)
-    return redirect('logout.html')
-    
+        return redirect('/logout')
+    except:
+
+        return redirect('/logout')
+
 @app.route('/logout')
+def ask_logout():
+   
+   return render_template('logout.html')
+
+
+@app.route('/logout', methods=['POST'])
 def logout():
     
-    del session["user_id"]
-    flash("Logged out.")
-    return redirect("/")
+    yes_no = request.form.get('yesno')
+
+    if yes_no == 'yes':
+
+        del session["user_id"]
+        flash("Logged out.")
+        return redirect("/")
+
+    elif yes_no == 'no_driver':
+
+        return render_template("Let's_Go!.html")
+    else:
+        return render_template("map_routes.html")
+
 
 
 

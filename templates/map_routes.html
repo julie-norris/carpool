@@ -13,7 +13,7 @@
        }
     </style>
   </head>
-    <body>
+  <body>
       <br>
       <span> <label>Please input your destination address:</label>
       </span>
@@ -115,30 +115,33 @@
 
 
     </script>
-<form id='rideform' action="/match_ride_rider" method="GET">
+<div class="orange">    
+    <form id='rideform' action="/match_ride_rider" method="GET">
+      <div>
+          <input type='text' id='rider_destination' name='rider_destination' placeholder="What is your destination?">
+          <input type='hidden' id='rider_destination1' name='rider_destination1'>
+      </div>
+
+      <div>
+          <h3>What date and time do you want to arrive?</h3>
+          <div id="datepicker">
+              <p>Date: <input id="date"type="date" name='date'></p>
+              <p>Arrival Time (use only 15 minute increments): <input id="time" type="time" name="time"></p>
+          </div>
+      </div>
+      <div >
+         <p>How many seats do you need in the car?</p><input id="seats" type="number" name="num_seats" min="1" max="5">  
+      </div><br><br>
+      <input type="submit">
+    </form>  
     <div>
-        <input type='text' id='rider_destination' name='rider_destination' placeholder="What is your destination?">
-        <input type='hidden' id='rider_destination1' name='rider_destination1'>
+      <h3>Available Rides will be displayed here:</h3>
+      <div id="showroutes">
+      </div>   
     </div>
-
-    <div>
-        <h3>What date and time do you want to arrive?</h3>
-        <div id="datepicker">
-            <p>Date: <input id="date"type="date" name='date'></p>
-            <p>Arrival Time (use only 15 minute increments): <input id="time" type="time" name="time"></p>
-        </div>
-    </div>
-    <div >
-       <p>How many seats do you need in the car?</p><input id="seats" type="number" name="num_seats" min="1" max="5">  
-    </div><br><br>
-    <input type="submit">
-</form>  
-
-  <div id="showroutes">
-    <p>Routes that match your ride needs will be displayed here:</p>
-  </div>   
-    </body>
-
+  </body>
+</div>
+  
   <script src="https://code.jquery.com/jquery.js"></script>
   <script src="/static/map_routes.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&callback=initMap&libraries=places, geometry"

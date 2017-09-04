@@ -1,48 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Please register to use CarPool!</h1>
+<div class="container-fluid orange form-horizontal">
+    <h1>Please register to use CarPool!</h1>
 
-<form class="form-horizontal" action="/register_newperson" method="POST">
+    <form action="/register_newperson" method="POST">
 
-    <div class="form-group">
-    
-        <h3> New users: </h3>
-            <label for="inputEmail" class="col-sm-2 control-label">Email:
-                <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email"required>
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="inputPassword" class="col-sm-2 control-label">Password:
-                <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password"required>
-            </label>
-        </div>
-            
-            <label>First Name:
-                <input type="text" name="fname" required>
-            </label>
-            <label>Last Name:
-                <input type="text" name="lname" required>
-            </label>
-            <label>Phone Number:
-                <input type="tel" name="phone_number" required>
-            </label>
-            <label>License Number (required):
-                <input type="text" name="license_number" required>
-            </label>
+        <div>
+            <div>
+            <h3> New users: </h3>
+                <label for="inputEmail" class="col-sm-2 control-label">Email:
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email"required>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword" class="col-sm-2 control-label">Password:
+                    <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password"required>
+                </label>
+            </div>
+            <div>
+                <label for="inputFirst" class="col-sm-6 control-label">First Name:
+                    <input type="text" class="form-control" id="First" name="fname" placeholder="Name" required>
+                </label>
+                <label for="inputLast" class="col-sm-6 control-label">Last Name:
+                    <input type="text" class="form-control" id="First" name="lname" placeholder="Last Name" required>
+                </label>
+            </div>
+            <div>
+                <label for="inputPhone" class="col-sm-4 control-label"><br>Phone Number:
+                    <input type="tel" class="form-control" id="Phone" name="phone_number" placeholder="555-555-5555" required>
+                </label>
+            </div>
+            <div>
+                <label for="inputLicense" class="col-sm-4 control-label"><br>License Number (required):
+                    <input type="text" class="form-control" id="License" name="license_number" required>
+                </label>
+            </div>
             <br>
             <br>
-            <label> Driver or Rider:<br>
-                <input type='radio' name="typeofuser" value="rider">Rider<br>
-                <input type='radio' name="typeofuser" value="driver">Driver<br>
-            </label>
+            <div>
+                <label class="col-sm-6 control-label"> <br>Driver or Rider:<br>
+                    <input type='radio' name="typeofuser" value="rider">Rider
+                    <input type='radio' name="typeofuser" value="driver">Driver
+                </label>
+            </div>
+        </div>
+        <div>
+            <label class="col-sm-5 control-label"> 
+            <input type="submit" value="Registration">
+        </div>
 
-
-    </div>
-
-    <div>
-        <input type="submit" value="Registration">
-    </div>
-
-</body>
-</html>
+    </form>
+</div>
 {% endblock %}

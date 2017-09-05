@@ -22,9 +22,6 @@
  -->
 <hr>
 
-{% for flash in get_flashed_messages() %}
-    {{ flash }}
-{% endfor %}
 
 
   <div class="container-fluid">
@@ -54,11 +51,19 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+        {% if not session.get("user_id") %}
         <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        {% else %}
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        {% endif %}
       </ul>
     </div>
 </nav>
   </div>
+
+{% for flash in get_flashed_messages() %}
+    {{ flash }}
+{% endfor %}
 
 <div class="container-fluid">
 

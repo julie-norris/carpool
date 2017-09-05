@@ -153,7 +153,7 @@ def driving_map():
     payload_2 = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': end_address}
     info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2, timeout=3.0)
 
-    
+
     arrival_time_date = datetime.strptime(date_time, '%Y-%m-%d|%H:%M')
     num_seats=int(request.form.get('num_seats'))
 
@@ -323,13 +323,15 @@ def rider():
     FROM driving_routes AS dr
     WHERE dr.end_add_id = :dest_needed
     AND dr.arrival_time_date <= :time_needed
+    AND CAST(dr.arrival_time_date AS DATE) = :date_input
     AND :seats_needed <= dr.num_seats - (SELECT COUNT(*)
                                         FROM rides as r
                                         WHERE r.route_id = dr.route_id)"""
 
     available_routes = db.session.execute(sql, {"dest_needed": destination,
                                                 "time_needed": arrival_time_date,
-                                                "seats_needed": seats_needed}).fetchall()
+                                                "seats_needed": seats_needed,
+                                                "date_input": date_input}).fetchall()
     available_routes = [Driving_Route.query.get(available_route[0]) for available_route in available_routes]
     
     # data = {'available_routes':available_routes}

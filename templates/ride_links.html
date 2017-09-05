@@ -1,6 +1,5 @@
 <hr>
 <!-- {% block content %} -->
-
     {% if routes %}
     <p>Route:</p>
     {% for route in routes %}
@@ -8,12 +7,12 @@
                 
         <input type='hidden' id='user' value='{{ session["user_id"] }}' name="user_id" >
         
-            Time: {{route.arrival_time_date}} <br>
-            Start: {{ route.start_address.street_address  }}<br>
+            Driver is planning on arriving at your location at: {{route.arrival_time_date.strftime('%a, %b %d at %-I:%M')}} <br><br>
+            Leaving from: {{ route.start_address.street_address  }}<br>
                    {{ route.start_address.city  }} 
                    {{ route.start_address.state  }} 
-                   {{ route.start_address.zip_code  }}<br>
-            End: {{ route.end_address.street_address  }}<br>
+                   {{ route.start_address.zip_code  }}<br><br>
+            The destination is: {{ route.end_address.street_address  }}<br>
                  {{ route.end_address.city  }} 
                  {{ route.end_address.state  }} 
                  {{ route.end_address.zip_code  }}<br>

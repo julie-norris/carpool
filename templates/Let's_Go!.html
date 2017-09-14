@@ -102,72 +102,74 @@
   
 
 <body>
-<form class="form-horizontal" id='form' action="/map" method='POST'>
-  <div class="container-fluid orange">
-    <input id="end" name="end" type='hidden'>  
-    <span id="destination"> 
+    <form class="form-horizontal" id='form' action="/map" method='POST'>
+        <div class="container-fluid orange">
+            <input id="end" name="end" type='hidden'>
+            <span id="destination"> 
       <h1>Where are you going?</h1>
       <input  id="pac-destination-input" name="destinationInput" class="controls" type="text" placeholder="Destination?" >
     </span>
-    <br>
-    <input id="start" name="start" type='hidden'>
-    <div id="start-address">
-      <h2>Enter your start location and destination:</h2> 
-      <input id="pac-origin-input" name="originInput" class="controls" type="text" placeholder="Where are you starting from?" >
-    </div>
-  </div>
-  
+            <br>
+            <input id="start" name="start" type='hidden'>
+            <div id="start-address">
+                <h2>Enter your start location and destination:</h2>
+                <input id="pac-origin-input" name="originInput" class="controls" type="text" placeholder="Where are you starting from?">
+            </div>
+        </div>
 
-  <div id="map"></div>
+        <div id="map"></div>
 
-  <div id="datepicker" class="orange">
-    <!-- <div class="container"> -->
-    <button id="getroute" class="blue btn-block"  type="button"> Click here to Get A Driving Route</button>
-    <!-- </div> -->
-    <h3>Date and Time of Travel:</h3>
-    <p>Date: <input type="date" name='date' ></p>
-    <p>Arrival Time (use only 15 minute increments): <input type="time" name="arrival_time"></p>
-    
- 
+        <div id="datepicker" class="orange">
+            <!-- <div class="container"> -->
+            <button id="getroute" class="blue btn-block" type="button"> Click here to Get A Driving Route</button>
+            <!-- </div> -->
+            <h3>Date and Time of Travel:</h3>
+            <p>Date:
+                <input type="date" name='date'>
+            </p>
+            <p>Arrival Time (use only 15 minute increments):
+                <input type="time" name="arrival_time">
+            </p>
 
-    <br>
-    <br>
-    
-    <div class="dropdown" id="num_seats">
-      <h3>How many seats do you have available? (1-6)</h3>
-        <select name="num_seats">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>  
-    </div>
-  
-    <br>
-    <br>
-      <input type="submit">
-  </div>    
-</form>
+            <br>
+            <br>
 
-<script src="https://code.jquery.com/jquery.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&libraries=places&callback=initMap"
-        async defer></script>
-<script src="https://code.jquery.com/jquery.js"></script> 
-<script> $('#getroute').on('click', calcRoute);</script>
+            <div class="dropdown" id="num_seats">
+                <h3>How many seats do you have available? (1-6)</h3>
+                <select name="num_seats">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
 
-<script> 
-// $('#form').on('submit', function (evt) {
-//       evt.preventDefault();
-//         var input=$('#pac-origin-input').val();
-//         $('#start').val(input);
-//         var otherinput=$('#pac-destination-input').val();
-//         $('#end').val(otherinput);
+            <br>
+            <br>
+            <input type="submit">
+        </div>
+    </form>
 
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4&libraries=places&callback=initMap" async defer></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script>
+        $('#getroute').on('click', calcRoute);
+    </script>
 
-//         $(this).submit();
-// });
-// </script>
+    <script>
+        // $('#form').on('submit', function (evt) {
+        //       evt.preventDefault();
+        //         var input=$('#pac-origin-input').val();
+        //         $('#start').val(input);
+        //         var otherinput=$('#pac-destination-input').val();
+        //         $('#end').val(otherinput);
+
+        //         $(this).submit();
+        // });
+        //
+    </script>
 </body>
 
 

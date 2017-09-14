@@ -1,6 +1,6 @@
 from flask import Flask, session
-from model import db, People, Address, Driving_Route, User_Address, Ride, Ride_Need, connect_to_db, example_data
-
+from model import db, Person, Address, Driving_Route, User_Address, Ride, Ride_Need, connect_to_db, example_data
+from seed import example_data
 from server import app
 import unittest 
 
@@ -27,17 +27,19 @@ class FlaskTestsDatabase(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
-    def test(self):
+    def test_login(self):
         """database test"""
 
-        result = self.client.get("/people",
-                                data={"user_id": "Smiley", 
-                                "password": "onefineday"})
+        result = self.client.post("/login_process",
+                                data={
+                                "email": "happy@gmail.com", 
+                                "password": "onefineday",
+                                "typeofuser" : "driver"}, follow_redirects=True)
 
-        self.assertIn(#####, result.data)
+        self.assertIn("Logged in", result.data)
 
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
 
 
 

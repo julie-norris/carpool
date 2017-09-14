@@ -170,7 +170,7 @@ def extract_data_fordb(data):
     binary = data.content
     output = json.loads(binary)
 
-    app.logger.debug(json.dumps(output, indent=4))
+    # app.logger.debug(json.dumps(output, indent=4))
 
     results = output['results'][0]
     latitude = results['geometry']['location']['lat']
@@ -419,10 +419,6 @@ def logout():
         return render_template("Let's_Go!.html")
     else:
         return render_template("map_routes.html")
-
-
-
-
 
 
 

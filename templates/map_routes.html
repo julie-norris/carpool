@@ -21,7 +21,7 @@
 
       <div id="map">
        </div>
-      <script>
+  <script>
       var map, infoWindow;
       var directionsService;
       var marker;
@@ -112,34 +112,40 @@
         infoWindow.open(map);
       }
 
+  </script>
 
-
-    </script>
-<div class="orange">    
+    
     <form id='rideform' action="/match_ride_rider" method="GET">
-      <div>
-          <input type='text' id='rider_destination' name='rider_destination' placeholder="What is your destination?">
-          <input type='hidden' id='rider_destination1' name='rider_destination1'>
-      </div>
+        <div>
+            <input type='text' id='rider_destination' name='rider_destination' placeholder="What is your destination?">
+            <input type='hidden' id='rider_destination1' name='rider_destination1'>
+        </div>
 
-      <div>
-          <h3>What date and time do you want to arrive?</h3>
-          <div id="datepicker">
-              <p>Date: <input id="date"type="date" name='date'></p>
-              <p>Arrival Time (use only 15 minute increments): <input id="time" type="time" name="time"></p>
-          </div>
-      </div>
-      <div >
-         <p>How many seats do you need in the car?</p><input id="seats" type="number" name="num_seats" min="1" max="5">  
-      </div><br><br>
-      <input type="submit">
-    </form>  
+        <div>
+            <h3>What date and time do you want to arrive?</h3>
+            <div id="datepicker">
+                <p>Date:
+                    <input id="date" type="date" name='date'>
+                </p>
+                <p>Arrival Time (use only 15 minute increments):
+                    <input id="time" type="time" name="time">
+                </p>
+            </div>
+        </div>
+        <div>
+            <p>How many seats do you need in the car?</p>
+            <input id="seats" type="number" name="num_seats" min="1" max="5">
+        </div>
+        <br>
+        <br>
+        <input type="submit">
+    </form>
     <div>
-      <h3>Available Rides will be displayed here:</h3>
-      <div id="showroutes">
-      </div>   
+        <h3>Available Rides will be displayed here:</h3>
+        <div id="showroutes">
+        </div>
     </div>
-  </body>
+    </body>
 </div>
   
   <script src="https://code.jquery.com/jquery.js"></script>

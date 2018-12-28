@@ -252,7 +252,7 @@ def rider():
 
     # rider = session.get("user_id")
     destination = request.args.get("rider_destination1")
-    payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': destination}
+    payload = {'key': '########', 'address': destination}
     info = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload)
     binary = info.content
     output = json.loads(binary)

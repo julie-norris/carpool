@@ -141,7 +141,7 @@ def driving_map():
     
     
     start_address=request.form.get("originInput")
-    payload = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': start_address}
+    payload = {'key': '####################', 'address': start_address}
     app.logger.info(start_address)
     app.logger.info(payload)
     try:
@@ -150,7 +150,7 @@ def driving_map():
         app.logger.error("Couldn't connect to google maps: {}".format(e.msg))
     
     end_address=request.form.get("destinationInput")
-    payload_2 = {'key': 'AIzaSyA5tDzhP-TkpUOI4dOZzkATen2OUCPasf4', 'address': end_address}
+    payload_2 = {'key': '#################', 'address': end_address}
     info_2 = requests.get('https://maps.googleapis.com/maps/api/geocode/json', params=payload_2, timeout=3.0)
 
 
